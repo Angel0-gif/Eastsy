@@ -1,0 +1,83 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="eatsy-logo">EATSY</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="goTo('payment')">
+        <ion-icon name="cart-outline" [class]="cart.itemCount() > 0 ? 'icon-gold' : ''"></ion-icon>
+        <span *ngIf="cart.itemCount() > 0" class="cart-badge">{{ cart.itemCount() }}</span>
+      </ion-button>
+      <ion-button><ion-icon name="notifications-outline"></ion-icon></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- HERO CARD -->
+  <div class="hero-card">
+    <p class="greeting">Welcome back,</p>
+    <h2 class="user-name">{{ user?.full_name }}</h2>
+    <p class="hero-date">{{ today | date:'EEEE, d MMMM y' }} · Yaoundé</p>
+    <div class="stats-row">
+      <div class="stat">
+        <span class="stat-val">{{ user?.loyalty_points ?? 0 }}</span>
+        <span class="stat-lbl">Points</span>
+      </div>
+      <div class="stat">
+        <span class="stat-val">{{ recentOrders.length }}</span>
+        <span class="stat-lbl">Orders</span>
+      </div>
+      <div class="stat">
+        <span class="stat-val">{{ user?.tier ?? '—' }}</span>
+        <span class="stat-lbl">Tier</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK ACCESS -->
+  <p class="sec-title">Quick Access</p>
+  <div class="qa-grid">
+    <div class="qa" (click)="goTo('menu')">
+      <span class="qa-icon">📖</span>
+      <p class="qa-lbl">Browse Menu</p>
+      <p class="qa-sub">Today's selection</p>
+    </div>
+    <div class="qa" (click)="goTo('reservation')">
+      <span class="qa-icon">📅</span>
+      <p class="qa-lbl">Reserve Table</p>
+      <p class="qa-sub">Book in seconds</p>
+    </div>
+    <div class="qa" (click)="goTo('tracking')">
+      <span class="qa-icon">📍</span>
+      <p class="qa-lbl">Track Order</p>
+      <p class="qa-sub">Live updates</p>
+    </div>
+    <div class="qa" (click)="goTo('reviews')">
+      <span class="qa-icon">⭐</span>
+      <p class="qa-lbl">Reviews</p>
+      <p class="qa-sub">Rate your meal</p>
+    </div>
+  </div>
+
+  <!-- RECENT ORDERS -->
+  <p class="sec-title">Recent Orders</p>
+  <div *ngIf="recentOrders.length === 0" class="empty-state">
+    <p>No orders yet — <span class="link-gold" (click)="goTo('menu')">browse the menu</span></p>
+  </div>
+  <div *ngFor="let order of recentOrders" class="order-card" (click)="goTo('tracking')">
+    <div class="order-icon">🍽️</div>
+    <div class="order-info">
+      <p class="order-name">Order #{{ order.order_number }}</p>
+      <p class="order-det">{{ order.created_at | date:'d MMM · h:mm a' }} · Table {{ order.table?.number }}</p>
+    </div>
+    <div class="order-right">
+      <p class="order-amt">{{ order.total | number }} XAF</p>
+      <span class="badge" [ngClass]="order.status === 'delivered' ? 'badge-green' : 'badge-amber'">
+        {{ order.status | titlecase }}
+      </span>
+    </div>
+  </div>
+</ion-content>

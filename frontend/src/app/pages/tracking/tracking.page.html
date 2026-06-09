@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="eatsy-logo">Order Tracking</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- NO ACTIVE ORDER -->
+  <div *ngIf="!order" class="empty-state">
+    <p class="empty-icon">🍽️</p>
+    <p>No active order found.</p>
+    <p class="empty-sub">Place an order from the menu to track it here.</p>
+  </div>
+
+  <ng-container *ngIf="order">
+    <!-- ORDER HEADER -->
+    <p class="sec-title">Active Order</p>
+    <div class="order-header-card">
+      <div>
+        <p class="order-num">Order #{{ order.order_number }}</p>
+        <p class="order-sub">Table {{ order.table?.number }} · {{ order.created_at | date:'h:mm a' }}</p>
+      </div>
+      <span class="badge badge-green">{{ order.status | titlecase }}</span>
+    </div>
+
+    <!-- TRACKING STEPS -->
+    <div class="track-card">
+      <ng-container *ngFor="let step of steps; let i = index">
+        <div class="tstep">
+          <div class="step-icon" [ngClass]="stepState(step)">{{ step.icon }}</div>
+          <div class="step-info">
+            <p class="step-name">{{ step.label }}</p>
+            <p class="step-time">{{ stepState(step) === 'done' ? 'Completed' : stepState(step) === 'active' ? 'In progress…' : '—' }}</p>
+          </div>
+        </div>
+        <div *ngIf="i < steps.length - 1" class="step-line"></div>
+      </ng-container>
+    </div>
+
+    <!-- ORDER ITEMS -->
+    <p class="sec-title">Items</p>
+    <div class="items-card">
+      <div *ngFor="let item of order.items" class="item-row">
+        <span>{{ item.menu_item.emoji }} {{ item.menu_item.name }}
+          <span *ngIf="item.quantity > 1"> ×{{ item.quantity }}</span>
+        </span>
+        <span>{{ item.subtotal | number }} XAF</span>
+      </div>
+      <div class="item-row total">
+        <span>Total</span>
+        <span class="total-val">{{ order.total | number }} XAF</span>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <ion-button expand="block" class="btn-gold" (click)="goToPay()">
+        Pay Now →
+      </ion-button>
+    </div>
+  </ng-container>
+</ion-content>

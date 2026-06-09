@@ -1,0 +1,67 @@
+/*
+ * EATSY Theme Variables
+ * Ionic CSS Custom Properties
+ */
+
+:root {
+  /* ── EATSY Brand Colors ── */
+  --eatsy-bg:     #0d0d0b;
+  --eatsy-bg2:    #141410;
+  --eatsy-bg3:    #1c1c16;
+  --eatsy-card:   #181814;
+  --eatsy-gold:   #c9a84c;
+  --eatsy-gold2:  #e2c46a;
+  --eatsy-muted:  #5a5a48;
+  --eatsy-text:   #f0ece0;
+  --eatsy-text2:  #948e7a;
+  --eatsy-border: rgba(201, 168, 76, 0.18);
+  --eatsy-red:    #c94040;
+  --eatsy-green:  #4aab68;
+  --eatsy-blue:   #4a90c9;
+  --eatsy-radius: 13px;
+
+  /* ── Ionic Color Overrides ── */
+  --ion-background-color:         var(--eatsy-bg);
+  --ion-background-color-rgb:     13, 13, 11;
+  --ion-text-color:               var(--eatsy-text);
+  --ion-text-color-rgb:           240, 236, 224;
+
+  --ion-color-primary:            var(--eatsy-gold);
+  --ion-color-primary-rgb:        201, 168, 76;
+  --ion-color-primary-contrast:   #0d0d0b;
+  --ion-color-primary-shade:      #b1943f;
+  --ion-color-primary-tint:       var(--eatsy-gold2);
+
+  --ion-color-secondary:          var(--eatsy-green);
+  --ion-color-secondary-rgb:      74, 171, 104;
+  --ion-color-secondary-contrast: #0d0d0b;
+
+  --ion-color-danger:             var(--eatsy-red);
+  --ion-color-danger-rgb:         201, 64, 64;
+  --ion-color-danger-contrast:    #ffffff;
+
+  --ion-color-medium:             var(--eatsy-muted);
+  --ion-color-medium-rgb:         90, 90, 72;
+  --ion-color-medium-contrast:    #ffffff;
+
+  --ion-color-light:              var(--eatsy-bg3);
+  --ion-color-light-rgb:          28, 28, 22;
+  --ion-color-light-contrast:     var(--eatsy-text);
+
+  --ion-item-background:          var(--eatsy-card);
+  --ion-item-border-color:        var(--eatsy-border);
+  --ion-border-color:             var(--eatsy-border);
+  --ion-card-background:          var(--eatsy-card);
+
+  --ion-font-family:              'Georgia', serif;
+  --ion-tab-bar-background:       var(--eatsy-bg);
+  --ion-tab-bar-border-color:     var(--eatsy-border);
+  --ion-tab-bar-color:            var(--eatsy-muted);
+  --ion-tab-bar-color-selected:   var(--eatsy-gold);
+
+  --ion-toolbar-background:       var(--eatsy-bg);
+  --ion-toolbar-color:            var(--eatsy-gold2);
+
+  --ion-safe-area-top:    env(safe-area-inset-top);
+  --ion-safe-area-bottom: env(safe-area-inset-bottom);
+}

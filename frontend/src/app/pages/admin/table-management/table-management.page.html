@@ -1,0 +1,86 @@
+<ion-content class="admin-content">
+  <div class="admin-wrap">
+    <div class="admin-topbar">
+      <div class="admin-brand">🪑 Table Management</div>
+      <button class="add-btn" (click)="openAdd()">+ Add Table</button>
+    </div>
+    <div class="admin-nav">
+      <div class="nav-item" (click)="go('dashboard')"><span>📊</span> Dashboard</div>
+      <div class="nav-item" (click)="go('menu')"><span>📖</span> Menu</div>
+      <div class="nav-item active" (click)="go('tables')"><span>🪑</span> Tables</div>
+      <div class="nav-item" (click)="go('orders')"><span>🛒</span> Orders</div>
+      <div class="nav-item" (click)="go('reports')"><span>📈</span> Reports</div>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="summary-row">
+      <div class="sum-card green"><span class="sum-val">{{ summary.available }}</span><span class="sum-lbl">Available</span></div>
+      <div class="sum-card red"><span class="sum-val">{{ summary.occupied }}</span><span class="sum-lbl">Occupied</span></div>
+      <div class="sum-card amber"><span class="sum-val">{{ summary.reserved }}</span><span class="sum-lbl">Reserved</span></div>
+    </div>
+
+    <!-- FLOOR PLAN -->
+    <div class="sec-title">Floor Plan</div>
+    <div class="floor-grid">
+      <div *ngFor="let t of tables" class="floor-table"
+        [class.available]="t.status==='available'"
+        [class.occupied]="t.status==='occupied'"
+        [class.reserved]="t.status==='reserved'"
+        (click)="cycleStatus(t)">
+        <div class="ft-num">{{ t.number }}</div>
+        <div class="ft-seats">{{ t.seats }}p</div>
+        <div class="ft-loc">{{ t.location }}</div>
+      </div>
+    </div>
+    <p class="tap-hint">Tap a table to cycle its status</p>
+
+    <!-- TABLE LIST -->
+    <div class="sec-title">All Tables</div>
+    <div class="table-list">
+      <div *ngFor="let t of tables" class="table-row">
+        <div class="tr-num">T{{ t.number }}</div>
+        <div class="tr-info">
+          <span class="tr-seats">{{ t.seats }} seats</span>
+          <span class="tr-loc">{{ t.location }}</span>
+        </div>
+        <span class="status-pill"
+          [class.available]="t.status==='available'"
+          [class.occupied]="t.status==='occupied'"
+          [class.reserved]="t.status==='reserved'">
+          {{ t.status | titlecase }}
+        </span>
+        <div class="tr-actions">
+          <button class="action-btn" (click)="openEdit(t)">✏️</button>
+          <button class="action-btn" (click)="deleteTable(t)">🗑️</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORM PANEL -->
+  <div class="form-overlay" *ngIf="showForm" (click)="cancel()"></div>
+  <div class="form-panel" *ngIf="showForm">
+    <div class="form-header">
+      <span class="form-title">{{ editingId ? 'Edit Table' : 'Add Table' }}</span>
+      <button class="form-close" (click)="cancel()">✕</button>
+    </div>
+    <div class="form-body">
+      <div class="fgroup"><label>Table Number *</label><input [(ngModel)]="form.number" class="ainput" type="number"></div>
+      <div class="fgroup"><label>Seats *</label><input [(ngModel)]="form.seats" class="ainput" type="number"></div>
+      <div class="fgroup"><label>Location</label>
+        <select [(ngModel)]="form.location" class="ainput aselect">
+          <option *ngFor="let l of locations" [value]="l">{{ l }}</option>
+        </select>
+      </div>
+      <div class="fgroup"><label>Status</label>
+        <select [(ngModel)]="form.status" class="ainput aselect">
+          <option *ngFor="let s of statuses" [value]="s">{{ s | titlecase }}</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-footer">
+      <button class="fbtn cancel" (click)="cancel()">Cancel</button>
+      <button class="fbtn save" (click)="save()">{{ editingId ? 'Update' : 'Add' }}</button>
+    </div>
+  </div>
+</ion-content>

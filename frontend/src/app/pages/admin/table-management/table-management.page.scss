@@ -1,0 +1,43 @@
+$bg:#0a0f1a;$bg2:#0f1623;$bg3:#151d2e;$card:#111827;$blue:#60a5fa;$gold:#f59e0b;$green:#34d399;$red:#f87171;$amber:#fbbf24;$text:#f1f5f9;$text2:#94a3b8;$muted:#334155;$border:rgba(96,165,250,0.12);
+.admin-content{--background:#{$bg};}
+.admin-wrap{min-height:100vh;background:$bg;padding-bottom:40px;}
+.admin-topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 12px;border-bottom:0.5px solid $border;background:$bg2;position:sticky;top:0;z-index:10;}
+.admin-brand{font-size:16px;color:$blue;font-family:'Georgia',serif;letter-spacing:0.08em;}
+.add-btn{background:$blue;color:#0a0f1a;border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:bold;cursor:pointer;}
+.admin-nav{display:flex;overflow-x:auto;background:$bg2;border-bottom:0.5px solid $border;scrollbar-width:none;&::-webkit-scrollbar{display:none;}}
+.nav-item{flex-shrink:0;padding:12px 16px;font-size:12px;color:$text2;cursor:pointer;display:flex;align-items:center;gap:6px;border-bottom:2px solid transparent;transition:all 0.18s;white-space:nowrap;&:hover{color:$blue;}&.active{color:$blue;border-bottom-color:$blue;}}
+.sec-title{font-size:10px;letter-spacing:0.2em;color:$muted;text-transform:uppercase;padding:16px 18px 8px;}
+.summary-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 14px 0;}
+.sum-card{background:$card;border:0.5px solid $border;border-radius:12px;padding:14px 10px;text-align:center;&.green .sum-val{color:$green;}&.red .sum-val{color:$red;}&.amber .sum-val{color:$amber;}}
+.sum-val{display:block;font-size:22px;font-weight:bold;font-family:'Georgia',serif;}
+.sum-lbl{display:block;font-size:10px;color:$text2;margin-top:3px;}
+.floor-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 14px;background:$card;border:0.5px solid $border;border-radius:12px;padding:14px;}
+.floor-table{aspect-ratio:1;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;border:0.5px solid $border;transition:all 0.18s;gap:2px;
+  &.available{border-color:rgba(52,211,153,0.4);background:rgba(52,211,153,0.06);}
+  &.occupied{border-color:rgba(248,113,113,0.4);background:rgba(248,113,113,0.06);}
+  &.reserved{border-color:rgba(251,191,36,0.4);background:rgba(251,191,36,0.06);}
+}
+.ft-num{font-size:16px;font-weight:bold;color:$text;}
+.ft-seats,.ft-loc{font-size:9px;color:$text2;}
+.tap-hint{font-size:10px;color:$muted;text-align:center;margin:8px 0 0;}
+.table-list{margin:0 14px;background:$card;border:0.5px solid $border;border-radius:12px;overflow:hidden;}
+.table-row{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:0.5px solid rgba(255,255,255,0.04);&:last-child{border-bottom:none;}}
+.tr-num{font-size:15px;font-weight:bold;color:$blue;width:28px;}
+.tr-info{flex:1;display:flex;gap:8px;align-items:center;}
+.tr-seats{font-size:12px;color:$text;}
+.tr-loc{font-size:11px;color:$muted;}
+.status-pill{font-size:9px;padding:3px 8px;border-radius:20px;letter-spacing:0.05em;text-transform:uppercase;&.available{background:rgba(52,211,153,0.15);color:$green;}&.occupied{background:rgba(248,113,113,0.15);color:$red;}&.reserved{background:rgba(251,191,36,0.15);color:$amber;}}
+.tr-actions{display:flex;gap:6px;}
+.action-btn{background:none;border:0.5px solid $border;border-radius:6px;padding:4px 8px;font-size:13px;cursor:pointer;}
+.form-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;}
+.form-panel{position:fixed;bottom:0;left:0;right:0;background:$bg2;border-top:0.5px solid $blue;border-radius:20px 20px 0 0;z-index:101;max-height:80vh;overflow-y:auto;}
+.form-header{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 12px;border-bottom:0.5px solid $border;}
+.form-title{font-size:16px;color:$blue;font-family:'Georgia',serif;}
+.form-close{background:none;border:none;color:$muted;font-size:20px;cursor:pointer;}
+.form-body{padding:16px 18px;display:flex;flex-direction:column;gap:12px;}
+.fgroup{display:flex;flex-direction:column;gap:5px;}
+label{font-size:11px;color:$text2;letter-spacing:0.08em;text-transform:uppercase;}
+.ainput{background:$bg3;border:0.5px solid $border;border-radius:9px;padding:11px 13px;font-size:14px;color:$text;outline:none;font-family:inherit;width:100%;&:focus{border-color:$blue;}}
+.aselect{appearance:none;cursor:pointer;option{background:$card;}}
+.form-footer{display:flex;gap:10px;padding:12px 18px 24px;}
+.fbtn{flex:1;padding:13px;border-radius:10px;font-size:14px;font-family:'Georgia',serif;cursor:pointer;border:none;&.cancel{background:$bg3;color:$text2;}&.save{background:$blue;color:#0a0f1a;font-weight:bold;}}

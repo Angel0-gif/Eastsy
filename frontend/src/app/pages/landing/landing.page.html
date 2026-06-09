@@ -1,0 +1,62 @@
+<ion-content [fullscreen]="true" class="landing-content">
+  <div class="landing-wrap">
+
+    <!-- HERO -->
+    <div class="hero-section">
+      <div class="hero-inner">
+
+        <div class="logo-block">
+          <div class="logo-mark">
+            <span class="logo-icon">🍽️</span>
+            <div class="ring r1"></div>
+            <div class="ring r2"></div>
+          </div>
+          <h1 class="brand-name">EATSY</h1>
+          <p class="brand-tagline">Dining · Elevated · Yaoundé</p>
+        </div>
+
+        <div class="slides-wrap">
+          <div *ngFor="let s of slides; let i = index"
+            class="slide" [class.active]="currentSlide === i">
+            <div class="slide-emoji">{{ s.emoji }}</div>
+            <h2 class="slide-title">{{ s.title }}</h2>
+            <p class="slide-desc">{{ s.desc }}</p>
+          </div>
+        </div>
+
+        <div class="dots">
+          <span *ngFor="let s of slides; let i = index"
+            class="dot" [class.active]="currentSlide === i"
+            (click)="currentSlide = i">
+          </span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FEATURES -->
+    <div class="features-row">
+      <div *ngFor="let f of features" class="feat">
+        <span class="feat-icon">{{ f.icon }}</span>
+        <span class="feat-label">{{ f.label }}</span>
+      </div>
+    </div>
+
+    <!-- ACTIONS — simple, no "admin" button exposed -->
+    <div class="actions-section">
+      <div class="actions-card">
+        <p class="actions-heading">Welcome to EATSY</p>
+        <button class="btn-gold" (click)="goToRegister()">
+          Create Account
+        </button>
+        <button class="btn-outline" (click)="goToLogin()">
+          Sign In
+        </button>
+        <p class="actions-note">
+          Already have an account? Sign in above.<br>
+          Admin access uses the same Sign In button.
+        </p>
+      </div>
+    </div>
+  </div>
+</ion-content>

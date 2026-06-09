@@ -1,0 +1,69 @@
+.login-content { --background: var(--eatsy-bg); }
+
+.login-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+  padding: 32px 28px;
+}
+
+.login-logo-wrap {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.logo-ring {
+  width: 84px; height: 84px;
+  border: 2px solid var(--eatsy-gold);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px;
+  margin: 0 auto 18px;
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute; inset: -8px;
+    border: 0.5px solid rgba(201,168,76,0.2);
+    border-radius: 50%;
+  }
+}
+
+.app-title   { font-size: 44px; letter-spacing: 0.2em; color: var(--eatsy-gold2); font-weight: normal; margin: 0; }
+.app-tagline { font-size: 11px; letter-spacing: 0.35em; color: var(--eatsy-muted); text-transform: uppercase; margin: 6px 0 0; }
+
+.login-form   { width: 100%; }
+.form-heading { font-size: 12px; color: var(--eatsy-text2); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 24px; text-align: center; }
+
+.field-group  { margin-bottom: 14px; }
+.field-label  { font-size: 11px; color: var(--eatsy-text2); letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 6px; }
+
+.eatsy-input {
+  --background: var(--eatsy-card);
+  --color: var(--eatsy-text);
+  --placeholder-color: var(--eatsy-muted);
+  --border-radius: 10px;
+  --padding-start: 13px;
+  --padding-end: 13px;
+  border: 0.5px solid var(--eatsy-border);
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+.btn-gold {
+  --background: var(--eatsy-gold);
+  --color: #0d0d0b;
+  --border-radius: 11px;
+  font-family: 'Georgia', serif;
+  font-weight: bold;
+  letter-spacing: 0.06em;
+  height: 50px;
+}
+
+.mt-16 { margin-top: 16px; }
+
+.form-hint { font-size: 12px; color: var(--eatsy-muted); text-align: center; margin-top: 16px; }
+.link-gold { color: var(--eatsy-gold); text-decoration: none; }
+
+.splash-credit { font-size: 11px; color: var(--eatsy-muted); text-align: center; line-height: 1.6; margin-top: 40px; }

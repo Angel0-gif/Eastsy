@@ -1,0 +1,71 @@
+<ion-content class="admin-content">
+  <div class="admin-wrap">
+    <div class="admin-topbar">
+      <div class="admin-brand">🛒 Orders</div>
+      <span class="order-count">{{ filtered.length }} orders</span>
+    </div>
+    <div class="admin-nav">
+      <div class="nav-item" (click)="go('dashboard')"><span>📊</span> Dashboard</div>
+      <div class="nav-item" (click)="go('menu')"><span>📖</span> Menu</div>
+      <div class="nav-item" (click)="go('tables')"><span>🪑</span> Tables</div>
+      <div class="nav-item active" (click)="go('orders')"><span>🛒</span> Orders</div>
+      <div class="nav-item" (click)="go('reports')"><span>📈</span> Reports</div>
+    </div>
+
+    <!-- STATUS FILTER -->
+    <div class="filter-row">
+      <div *ngFor="let s of statuses"
+        class="filter-pill" [class.active]="filterStatus === s"
+        (click)="filterStatus = s">
+        {{ s === 'all' ? 'All' : (s | titlecase) }}
+      </div>
+    </div>
+
+    <!-- ORDER CARDS -->
+    <div class="orders-list">
+      <div *ngFor="let o of filtered" class="order-card">
+        <!-- HEADER -->
+        <div class="order-head" (click)="toggle(o.id)">
+          <div class="oh-left">
+            <span class="oid">{{ o.id }}</span>
+            <span class="otable">Table {{ o.table }}</span>
+          </div>
+          <div class="oh-right">
+            <span class="status-pill"
+              [class.preparing]="o.status==='preparing'"
+              [class.delivered]="o.status==='delivered'"
+              [class.received]="o.status==='received'"
+              [class.paid]="o.status==='paid'"
+              [class.confirmed]="o.status==='confirmed'"
+              [class.on_the_way]="o.status==='on_the_way'">
+              {{ o.status | titlecase }}
+            </span>
+            <span class="chevron">{{ expandedId === o.id ? '▲' : '▼' }}</span>
+          </div>
+        </div>
+
+        <!-- EXPANDED -->
+        <div class="order-body" *ngIf="expandedId === o.id">
+          <div class="order-items">
+            <div *ngFor="let item of o.items" class="oi-row">
+              <span>{{ item.name }}</span>
+              <span>×{{ item.qty }}</span>
+            </div>
+          </div>
+          <div class="order-meta">
+            <span class="ometa-total">{{ o.total }} XAF</span>
+            <span class="ometa-time">{{ o.time }}</span>
+          </div>
+          <div class="order-footer">
+            <span class="ophone">📞 {{ o.phone }}</span>
+            <button class="advance-btn" (click)="advance(o)"
+              *ngIf="o.status !== 'delivered' && o.status !== 'paid'">
+              Advance → {{ statusFlow[statusFlow.indexOf(o.status)+1] | titlecase }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="height:24px;"></div>
+  </div>
+</ion-content>

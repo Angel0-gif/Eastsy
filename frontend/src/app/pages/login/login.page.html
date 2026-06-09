@@ -1,0 +1,45 @@
+<ion-content class="login-content">
+  <div class="login-wrapper">
+
+    <div class="login-logo-wrap">
+      <div class="logo-ring">🍽️</div>
+      <h1 class="app-title">EATSY</h1>
+      <p class="app-tagline">Dining, elevated</p>
+    </div>
+
+    <div class="login-form">
+      <p class="form-heading">Welcome back</p>
+
+      <div class="field-group">
+        <label class="field-label">Email</label>
+        <ion-input
+          [(ngModel)]="email"
+          type="email"
+          placeholder="you@example.com"
+          autocomplete="email"
+          class="eatsy-input">
+        </ion-input>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Password</label>
+        <ion-input
+          [(ngModel)]="password"
+          type="password"
+          placeholder="••••••••"
+          class="eatsy-input">
+        </ion-input>
+      </div>
+
+      <ion-button expand="block" class="btn-gold mt-16" (click)="onLogin()" [disabled]="loading">
+        <ion-spinner *ngIf="loading" name="crescent" slot="start"></ion-spinner>
+        {{ loading ? 'Signing in…' : 'Sign In →' }}
+      </ion-button>
+
+      <p class="form-hint">
+        New here?
+        <a routerLink="/register" class="link-gold">Create account</a>
+      </p>
+    </div>
+  </div>
+</ion-content>

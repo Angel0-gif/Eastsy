@@ -1,0 +1,47 @@
+.eatsy-logo  { font-size: 18px; letter-spacing: 0.12em; color: var(--eatsy-gold2); font-family: 'Georgia', serif; }
+.icon-gold   { color: var(--eatsy-gold); }
+.cart-badge  { position: absolute; top: 6px; right: 6px; background: var(--eatsy-red); color: white; font-size: 8px; width: 14px; height: 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+.eatsy-search { --background: var(--eatsy-card); --color: var(--eatsy-text); --placeholder-color: var(--eatsy-muted); --icon-color: var(--eatsy-muted); --border-radius: 10px; padding: 8px 14px; }
+
+.cat-row     { display: flex; gap: 7px; padding: 6px 14px; overflow-x: auto; scrollbar-width: none; }
+.cat-row::-webkit-scrollbar { display: none; }
+ion-chip     { --background: var(--eatsy-card); --color: var(--eatsy-text2); border: 0.5px solid var(--eatsy-border); flex-shrink: 0; }
+.active-chip { --background: var(--eatsy-gold); --color: #0d0d0b; border-color: var(--eatsy-gold); }
+
+.menu-grid   { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; margin: 8px 14px; }
+.menu-card   { background: var(--eatsy-card); border: 0.5px solid var(--eatsy-border); border-radius: 13px; overflow: hidden; cursor: pointer; &:hover { border-color: var(--eatsy-gold); } }
+.menu-img    { height: 95px; display: flex; align-items: center; justify-content: center; font-size: 42px; background: var(--eatsy-bg3); }
+.menu-body   { padding: 9px; }
+.menu-name   { font-size: 12px; color: var(--eatsy-text); font-weight: bold; margin: 0 0 2px; }
+.menu-desc   { font-size: 10px; color: var(--eatsy-text2); margin: 0; line-height: 1.4; }
+.menu-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 7px; }
+.menu-price  { font-size: 14px; color: var(--eatsy-gold2); font-weight: bold; }
+.add-btn     { width: 24px; height: 24px; background: var(--eatsy-gold); border: none; border-radius: 50%; cursor: pointer; color: #0d0d0b; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+
+.loading-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; margin: 8px 14px; }
+.skel-card    { height: 160px; border-radius: 13px; }
+.skeleton     { background: linear-gradient(90deg, var(--eatsy-card) 25%, var(--eatsy-bg3) 50%, var(--eatsy-card) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+.empty-state { text-align: center; padding: 40px 20px; font-size: 14px; color: var(--eatsy-text2); }
+
+// Detail Modal
+.detail-content { --background: var(--eatsy-bg2); }
+.detail-wrap    { padding: 20px 18px 30px; text-align: center; }
+.detail-emoji   { font-size: 56px; margin-bottom: 12px; }
+.detail-name    { font-size: 20px; color: var(--eatsy-text); font-weight: normal; margin: 0 0 6px; }
+.detail-desc    { font-size: 13px; color: var(--eatsy-text2); line-height: 1.6; margin: 0 0 10px; }
+.detail-tags    { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
+.dtag           { font-size: 10px; padding: 3px 10px; border-radius: 20px; border: 0.5px solid var(--eatsy-border); color: var(--eatsy-text2); }
+.detail-price   { font-size: 26px; color: var(--eatsy-gold); margin: 0 0 14px; }
+.qty-row        { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 16px; }
+.qty-btn        { width: 34px; height: 34px; background: var(--eatsy-card); border: 0.5px solid var(--eatsy-border); border-radius: 50%; color: var(--eatsy-gold); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.qty-val        { font-size: 18px; color: var(--eatsy-text); min-width: 24px; text-align: center; }
+.btn-gold       { --background: var(--eatsy-gold); --color: #0d0d0b; --border-radius: 11px; font-family: 'Georgia', serif; font-weight: bold; }
+.menu-img-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+}

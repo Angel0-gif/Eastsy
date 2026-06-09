@@ -1,0 +1,44 @@
+.eatsy-logo { font-size: 18px; letter-spacing: 0.12em; color: var(--eatsy-gold2); font-family: 'Georgia', serif; }
+.icon-gold  { color: var(--eatsy-gold); }
+.cart-badge { position: absolute; top: 6px; right: 6px; background: var(--eatsy-red); color: white; font-size: 8px; width: 14px; height: 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+.hero-card {
+  margin: 14px;
+  background: var(--eatsy-bg3);
+  border: 0.5px solid var(--eatsy-border);
+  border-radius: 13px;
+  padding: 18px;
+}
+.greeting  { font-size: 12px; color: var(--eatsy-text2); margin: 0; }
+.user-name { font-size: 21px; color: var(--eatsy-text); margin: 2px 0; font-weight: normal; }
+.hero-date { font-size: 11px; color: var(--eatsy-muted); margin: 4px 0 0; }
+.stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-top: 14px; }
+.stat      { background: rgba(255,255,255,0.04); border-radius: 8px; padding: 10px 6px; text-align: center; }
+.stat-val  { display: block; font-size: 17px; font-weight: bold; color: var(--eatsy-gold); }
+.stat-lbl  { display: block; font-size: 9px; color: var(--eatsy-text2); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
+
+.qa-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 14px; }
+.qa {
+  background: var(--eatsy-card); border: 0.5px solid var(--eatsy-border); border-radius: 13px;
+  padding: 14px; cursor: pointer;
+  &:hover { border-color: var(--eatsy-gold); }
+}
+.qa-icon { font-size: 22px; display: block; margin-bottom: 6px; }
+.qa-lbl  { font-size: 13px; color: var(--eatsy-text); margin: 0; }
+.qa-sub  { font-size: 10px; color: var(--eatsy-text2); margin: 3px 0 0; }
+
+.order-card {
+  display: flex; align-items: center; gap: 11px;
+  background: var(--eatsy-card); border: 0.5px solid var(--eatsy-border);
+  border-radius: 13px; padding: 12px 14px; margin: 0 14px 8px; cursor: pointer;
+  &:hover { border-color: rgba(201,168,76,0.35); }
+}
+.order-icon  { font-size: 24px; }
+.order-info  { flex: 1; }
+.order-name  { font-size: 13px; color: var(--eatsy-text); margin: 0; }
+.order-det   { font-size: 11px; color: var(--eatsy-text2); margin: 2px 0 0; }
+.order-right { text-align: right; }
+.order-amt   { font-size: 14px; color: var(--eatsy-gold2); font-weight: bold; margin: 0 0 3px; }
+
+.empty-state { text-align: center; padding: 20px; font-size: 13px; color: var(--eatsy-text2); }
+.link-gold   { color: var(--eatsy-gold); cursor: pointer; }

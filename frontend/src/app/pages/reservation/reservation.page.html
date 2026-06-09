@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="eatsy-logo">Reservation</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <p class="sec-title">Date & Guests</p>
+  <div class="form-section">
+    <div class="field-group"><label class="field-label">Date</label>
+      <input type="date" class="eatsy-input"
+  [(ngModel)]="date"
+  [min]="today"
+  (change)="onDateChange()">
+    <div class="field-group"><label class="field-label">Guests</label>
+      <select class="eatsy-input" [(ngModel)]="guests">
+        <option *ngFor="let n of [1,2,3,4,5,6]" [value]="n">{{ n }} Guest{{ n > 1 ? 's' : '' }}</option>
+      </select></div>
+    <div class="field-group"><label class="field-label">Special Requests</label>
+      <textarea class="eatsy-input" [(ngModel)]="special" rows="2" placeholder="Allergies, birthday setup…"></textarea></div>
+  </div>
+
+  <p class="sec-title">Available Times</p>
+  <div class="time-grid">
+    <div *ngFor="let slot of timeSlots"
+      class="tslot" [class.on]="time === slot.value" [class.full]="!slot.available"
+      (click)="selectTime(slot)">{{ slot.label }}</div>
+  </div>
+
+  <p class="sec-title">Choose Table</p>
+  <div class="legend">
+    <span class="leg"><span class="leg-dot green"></span>Available</span>
+    <span class="leg"><span class="leg-dot red"></span>Occupied</span>
+    <span class="leg"><span class="leg-dot gold"></span>Selected</span>
+  </div>
+  <div *ngIf="tablesLoading" class="tables-loading">
+  Loading tables…
+  </div>
+  <div class="table-grid" *ngIf="!tablesLoading" id="table-grid">
+    <div *ngFor="let t of tables" class="tbl"
+      [class.avail]="t.status === 'available'"
+      [class.occ]="t.status === 'occupied'"
+      [class.sel]="selectedTableId === t.id"
+      (click)="selectTable(t)">
+      <span class="tbl-n">{{ t.number }}</span>
+      <span class="tbl-s">{{ t.seats }}p</span>
+    </div>
+  </div>
+  <div class="page-footer">
+    <ion-button expand="block" class="btn-gold" (click)="confirm()" [disabled]="loading">
+      Confirm Reservation
+    </ion-button>
+  </div>
+</div>
+</ion-content>

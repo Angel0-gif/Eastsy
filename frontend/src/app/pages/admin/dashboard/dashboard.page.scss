@@ -1,0 +1,185 @@
+// ── Admin Theme Variables
+$bg:      #0a0f1a;
+$bg2:     #0f1623;
+$bg3:     #151d2e;
+$card:    #111827;
+$blue:    #60a5fa;
+$blue2:   #93c5fd;
+$gold:    #f59e0b;
+$green:   #34d399;
+$red:     #f87171;
+$amber:   #fbbf24;
+$text:    #f1f5f9;
+$text2:   #94a3b8;
+$muted:   #334155;
+$border:  rgba(96,165,250,0.12);
+
+.admin-content { --background: #{$bg}; }
+
+.admin-wrap {
+  min-height: 100vh;
+  background: $bg;
+  padding-bottom: 32px;
+}
+
+// TOP BAR
+.admin-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px 12px;
+  border-bottom: 0.5px solid $border;
+  background: $bg2;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.admin-brand { font-size: 16px; color: $blue; font-family: 'Georgia', serif; letter-spacing: 0.08em; }
+.admin-date  { font-size: 11px; color: $text2; margin-top: 2px; }
+.logout-btn  { background: none; border: 0.5px solid $border; border-radius: 8px; padding: 6px 12px; font-size: 12px; color: $text2; cursor: pointer; &:hover { color: $red; border-color: $red; } }
+
+// NAV
+.admin-nav {
+  display: flex;
+  overflow-x: auto;
+  gap: 0;
+  background: $bg2;
+  border-bottom: 0.5px solid $border;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+.nav-item {
+  flex-shrink: 0;
+  padding: 12px 16px;
+  font-size: 12px;
+  color: $text2;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 2px solid transparent;
+  transition: all 0.18s;
+  white-space: nowrap;
+  &:hover  { color: $blue; }
+  &.active { color: $blue; border-bottom-color: $blue; }
+}
+
+// SEC TITLE
+.sec-title {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: $muted;
+  text-transform: uppercase;
+  padding: 16px 18px 8px;
+}
+
+// STATS
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 0 14px;
+}
+.stat-card {
+  background: $card;
+  border: 0.5px solid $border;
+  border-radius: 12px;
+  padding: 14px;
+  position: relative;
+}
+.stat-icon  { font-size: 22px; margin-bottom: 8px; }
+.stat-val   { font-size: 22px; font-weight: bold; color: $blue; font-family: 'Georgia', serif; }
+.stat-label { font-size: 11px; color: $text2; margin-top: 3px; }
+.stat-trend { position: absolute; top: 12px; right: 12px; font-size: 10px; padding: 2px 7px; border-radius: 20px; &.up { background: rgba(52,211,153,0.15); color: $green; } }
+
+// QUICK ACTIONS
+.qa-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 14px; }
+.qa-card {
+  background: $card;
+  border: 0.5px solid $border;
+  border-radius: 12px;
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: border-color 0.18s;
+  &:hover { border-color: $blue; }
+}
+.qa-ico { font-size: 24px; }
+.qa-lbl { font-size: 12px; color: $text; text-align: center; }
+
+// TABLE
+.table-card {
+  margin: 0 14px;
+  background: $card;
+  border: 0.5px solid $border;
+  border-radius: 12px;
+  overflow: hidden;
+  overflow-x: auto;
+}
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  min-width: 360px;
+
+  th {
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 10px;
+    color: $muted;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-bottom: 0.5px solid $border;
+    background: $bg3;
+    font-weight: normal;
+  }
+
+  td {
+    padding: 10px 12px;
+    border-bottom: 0.5px solid rgba(255,255,255,0.04);
+    color: $text2;
+    &:last-child { border-right: none; }
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+}
+.order-id { color: $blue; font-family: 'Courier New', monospace; font-size: 11px; }
+.amount   { color: $gold; font-weight: bold; }
+.time-col { color: $muted; }
+
+.status-pill {
+  font-size: 9px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  &.preparing { background: rgba(251,191,36,0.15); color: $amber; }
+  &.delivered { background: rgba(52,211,153,0.15); color: $green; }
+  &.received  { background: rgba(96,165,250,0.15); color: $blue; }
+  &.paid      { background: rgba(52,211,153,0.1);  color: $green; }
+}
+
+// MENU LIST
+.menu-list { margin: 0 14px; background: $card; border: 0.5px solid $border; border-radius: 12px; overflow: hidden; }
+.menu-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 14px;
+  border-bottom: 0.5px solid rgba(255,255,255,0.04);
+  &:last-child { border-bottom: none; }
+}
+.menu-row-info { display: flex; flex-direction: column; gap: 2px; }
+.menu-row-name { font-size: 13px; color: $text; }
+.menu-row-cat  { font-size: 10px; color: $muted; }
+.menu-row-right { display: flex; align-items: center; gap: 10px; }
+.menu-row-price { font-size: 12px; color: $gold; }
+.avail-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  &.on  { background: $green; box-shadow: 0 0 6px rgba(52,211,153,0.5); }
+  &.off { background: $red; }
+}

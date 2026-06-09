@@ -1,0 +1,133 @@
+/*
+ * EATSY — Global Styles
+ * Ionic + Angular Frontend
+ */
+
+// Ionic core
+@import "@ionic/angular/css/core.css";
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+// ── BASE ──────────────────────────────
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Georgia', serif;
+  background: var(--eatsy-bg);
+  color: var(--eatsy-text);
+}
+
+ion-content {
+  --background: var(--eatsy-bg);
+}
+
+ion-toolbar {
+  --background: var(--eatsy-bg);
+  --border-color: var(--eatsy-border);
+  --color: var(--eatsy-gold2);
+}
+
+ion-tab-bar {
+  --background: var(--eatsy-bg);
+  --border: 0.5px solid var(--eatsy-border);
+  --color: var(--eatsy-muted);
+  --color-selected: var(--eatsy-gold);
+}
+
+ion-card {
+  --background: var(--eatsy-card);
+  --color: var(--eatsy-text);
+  border: 0.5px solid var(--eatsy-border);
+  border-radius: 13px;
+  margin: 0;
+}
+
+ion-button {
+  --border-radius: 11px;
+  font-family: 'Georgia', serif;
+  letter-spacing: 0.06em;
+
+  &.btn-gold {
+    --background: var(--eatsy-gold);
+    --color: #0d0d0b;
+    --background-activated: var(--eatsy-gold2);
+  }
+
+  &.btn-outline-gold {
+    --background: transparent;
+    --color: var(--eatsy-gold);
+    --border-color: var(--eatsy-gold);
+    --border-width: 0.5px;
+    --border-style: solid;
+  }
+}
+
+ion-input, ion-textarea, ion-select {
+  --background: var(--eatsy-card);
+  --color: var(--eatsy-text);
+  --placeholder-color: var(--eatsy-muted);
+  --border-color: var(--eatsy-border);
+  border-radius: 10px;
+  font-family: 'Georgia', serif;
+}
+
+// ── UTILITIES ─────────────────────────
+.text-gold   { color: var(--eatsy-gold); }
+.text-gold2  { color: var(--eatsy-gold2); }
+.text-muted  { color: var(--eatsy-text2); }
+.text-danger { color: var(--eatsy-red); }
+.text-success { color: var(--eatsy-green); }
+
+.bg-card { background: var(--eatsy-card); }
+.bg-dark  { background: var(--eatsy-bg3); }
+
+.border-gold { border: 0.5px solid var(--eatsy-gold); }
+
+.badge {
+  font-size: 9px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  display: inline-block;
+
+  &.badge-green  { background: rgba(74,171,104,0.15); color: var(--eatsy-green); }
+  &.badge-amber  { background: rgba(201,168,76,0.15);  color: var(--eatsy-gold); }
+  &.badge-red    { background: rgba(201,64,64,0.15);   color: var(--eatsy-red); }
+}
+
+.sec-title {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--eatsy-muted);
+  text-transform: uppercase;
+  padding: 14px 16px 8px;
+}
+
+// ── ANIMATIONS ────────────────────────
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeSlideUp 0.22s ease forwards; }
+
+@keyframes pulse {
+  0%   { transform: scale(1);   opacity: 0.6; }
+  100% { transform: scale(2.8); opacity: 0; }
+}
+
+// ── SCROLLBAR ─────────────────────────
+::-webkit-scrollbar       { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--eatsy-border); border-radius: 3px; }

@@ -1,0 +1,106 @@
+<ion-content class="admin-content">
+  <div class="admin-wrap">
+
+    <!-- TOP BAR -->
+    <div class="admin-topbar">
+      <div class="admin-brand">📖 Menu Management</div>
+      <button class="add-btn" (click)="openAdd()">+ Add Item</button>
+    </div>
+
+    <!-- NAV -->
+    <div class="admin-nav">
+      <div class="nav-item" (click)="go('dashboard')"><span>📊</span> Dashboard</div>
+      <div class="nav-item active" (click)="go('menu')"><span>📖</span> Menu</div>
+      <div class="nav-item" (click)="go('tables')"><span>🪑</span> Tables</div>
+      <div class="nav-item" (click)="go('orders')"><span>🛒</span> Orders</div>
+      <div class="nav-item" (click)="go('reports')"><span>📈</span> Reports</div>
+    </div>
+
+    <!-- CATEGORY FILTER -->
+    <div class="cat-row">
+      <div *ngFor="let c of categories"
+        class="cat-pill" [class.active]="filterCat === c"
+        (click)="filterCat = c">
+        {{ c | titlecase }}
+      </div>
+    </div>
+
+    <!-- MENU ITEMS -->
+    <div class="items-list">
+      <div *ngFor="let item of filtered" class="item-card">
+        <div class="item-emoji">{{ item.emoji }}</div>
+        <div class="item-info">
+          <div class="item-name">{{ item.name }}</div>
+          <div class="item-desc">{{ item.description }}</div>
+          <div class="item-meta">
+            <span class="item-cat">{{ item.category | titlecase }}</span>
+            <span class="item-price">{{ item.price | number }} XAF</span>
+          </div>
+        </div>
+        <div class="item-actions">
+          <div class="avail-toggle" [class.on]="item.available" (click)="toggleAvail(item)">
+            {{ item.available ? '✅' : '🔴' }}
+          </div>
+          <button class="action-btn edit" (click)="openEdit(item)">✏️</button>
+          <button class="action-btn del" (click)="deleteItem(item)">🗑️</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ADD / EDIT FORM PANEL -->
+  <div class="form-overlay" *ngIf="showForm" (click)="cancel()"></div>
+  <div class="form-panel" *ngIf="showForm">
+    <div class="form-header">
+      <span class="form-title">{{ editingId ? 'Edit Item' : 'Add Menu Item' }}</span>
+      <button class="form-close" (click)="cancel()">✕</button>
+    </div>
+    <div class="form-body">
+      <div class="fgroup">
+        <label>Emoji</label>
+        <div class="fgroup">
+        <label>Item Photo (optional)</label>
+        <input type="file" accept="image/*" class="ainput file-input"
+        (change)="onImageSelected($event)">
+        <img *ngIf="imagePreview" [src]="imagePreview"
+        style="width:100%;height:120px;object-fit:cover;border-radius:8px;margin-top:8px;">
+        </div>
+        <input [(ngModel)]="form.emoji" class="ainput" placeholder="🍽️" maxlength="4">
+      </div>
+      <div class="fgroup">
+        <label>Name *</label>
+        <input [(ngModel)]="form.name" class="ainput" placeholder="e.g. Poulet DG">
+      </div>
+      <div class="fgroup">
+        <label>Description</label>
+        <textarea [(ngModel)]="form.description" class="ainput" rows="2" placeholder="Short description"></textarea>
+      </div>
+      <div class="fgroup">
+        <label>Price (XAF) *</label>
+        <input [(ngModel)]="form.price" class="ainput" type="number" placeholder="0">
+      </div>
+      <div class="fgroup">
+        <label>Category</label>
+        <select [(ngModel)]="form.category" class="ainput aselect">
+          <option value="starter">Starter</option>
+          <option value="main">Main Course</option>
+          <option value="dessert">Dessert</option>
+          <option value="drinks">Drinks</option>
+          <option value="special">Chef's Special</option>
+        </select>
+      </div>
+      <div class="fgroup toggle-group">
+        <label>Available</label>
+        <div class="toggle-switch" [class.on]="form.available" (click)="form.available = !form.available">
+          <div class="toggle-thumb"></div>
+        </div>
+      </div>
+    </div>
+    <div class="form-footer">
+      <button class="fbtn cancel" (click)="cancel()">Cancel</button>
+      <button class="fbtn save" (click)="save()">{{ editingId ? 'Update' : 'Add Item' }}</button>
+    </div>
+  </div>
+
+</ion-content>

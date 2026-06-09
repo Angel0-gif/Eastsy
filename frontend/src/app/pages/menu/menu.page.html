@@ -1,0 +1,84 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="eatsy-logo">Menu</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="cart-outline" [class]="cart.itemCount() > 0 ? 'icon-gold' : ''"></ion-icon>
+        <span *ngIf="cart.itemCount() > 0" class="cart-badge">{{ cart.itemCount() }}</span>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- SEARCH -->
+  <ion-searchbar
+    [(ngModel)]="searchQuery"
+    (ionInput)="onSearch($event)"
+    placeholder="Search dishes…"
+    class="eatsy-search">
+  </ion-searchbar>
+
+  <!-- CATEGORY CHIPS -->
+  <div class="cat-row">
+    <ion-chip *ngFor="let cat of categories"
+      [class.active-chip]="activeCategory === cat.value"
+      (click)="selectCategory(cat.value)">
+      <ion-label>{{ cat.label }}</ion-label>
+    </ion-chip>
+  </div>
+
+  <!-- MENU GRID -->
+  <div *ngIf="loading" class="loading-grid">
+    <div *ngFor="let n of [1,2,3,4]" class="skel-card skeleton"></div>
+  </div>
+
+  <div *ngIf="!loading && items.length === 0" class="empty-state">
+    <p>🍽️ No dishes found</p>
+  </div>
+
+  <div class="menu-grid" *ngIf="!loading && items.length > 0">
+    <div *ngFor="let item of items" class="menu-card" (click)="openDetail(item)">
+      <div class="menu-img">
+         <img *ngIf="item.image"
+          [src]="getImageUrl(item.image)"
+          [alt]="item.name"
+          class="menu-img-photo">
+        <span *ngIf="!item.image">{{ item.emoji }}</span>
+      </div>
+      <div class="menu-body">
+        <p class="menu-name">{{ item.name }}</p>
+        <p class="menu-desc">{{ item.description }}</p>
+        <div class="menu-footer">
+          <span class="menu-price">{{ item.price | number }} XAF</span>
+          <button class="add-btn" (click)="quickAdd(item, $event)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<!-- ITEM DETAIL MODAL -->
+<ion-modal [isOpen]="isDetailOpen" (didDismiss)="closeDetail()" [initialBreakpoint]="0.75" [breakpoints]="[0, 0.75, 1]">
+  <ng-template>
+    <ion-content class="detail-content" *ngIf="selectedItem">
+      <div class="detail-wrap">
+        <div class="detail-emoji">{{ selectedItem.emoji }}</div>
+        <h2 class="detail-name">{{ selectedItem.name }}</h2>
+        <p class="detail-desc">{{ selectedItem.description }}</p>
+        <div class="detail-tags">
+          <span *ngFor="let tag of selectedItem.tags" class="dtag">{{ tag }}</span>
+        </div>
+        <p class="detail-price">{{ selectedItem.price | number }} XAF</p>
+        <div class="qty-row">
+          <button class="qty-btn" (click)="chgQty(-1)">−</button>
+          <span class="qty-val">{{ detailQty }}</span>
+          <button class="qty-btn" (click)="chgQty(1)">+</button>
+        </div>
+        <ion-button expand="block" class="btn-gold" (click)="addFromDetail()">
+          Add to Cart →
+        </ion-button>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>

@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="eatsy-logo">Reviews</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+
+  <!-- RATING SUMMARY -->
+  <div class="rating-box" *ngIf="summary">
+    <p class="rating-big">{{ summary.average | number:'1.1-1' }}</p>
+    <div class="stars-row">
+      <span *ngFor="let on of starsArray(summary.average | round)" class="star-disp" [class.on]="on">★</span>
+    </div>
+    <p class="rating-count">Based on {{ summary.total }} reviews</p>
+    <div class="bars">
+      <div *ngFor="let s of [5,4,3,2,1]" class="bar-row">
+        <span class="bar-lbl">{{ s }}★</span>
+        <div class="bar-track"><div class="bar-fill" [style.width.%]="barPct(s)"></div></div>
+        <span class="bar-pct">{{ barPct(s) }}%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="write-btn-wrap">
+    <ion-button expand="block" class="btn-gold" (click)="openForm()">Write a Review</ion-button>
+  </div>
+
+  <p class="sec-title">Recent Reviews</p>
+
+  <div *ngIf="loading" class="loading-wrap"><ion-spinner name="crescent" color="primary"></ion-spinner></div>
+
+  <div *ngFor="let r of reviews" class="review-card">
+    <div class="rev-head">
+      <div class="rev-av">{{ r.user.full_name.slice(0,2).toUpperCase() }}</div>
+      <div>
+        <p class="rev-name">{{ r.user.full_name }}</p>
+        <p class="rev-date">{{ r.created_at | date:'d MMM y' }}</p>
+      </div>
+      <div class="rev-stars">
+        <span *ngFor="let on of starsArray(r.rating)" [class.on]="on">★</span>
+      </div>
+    </div>
+    <p class="rev-text">{{ r.comment }}</p>
+  </div>
+
+</ion-content>
+
+<!-- WRITE REVIEW MODAL -->
+<ion-modal [isOpen]="formOpen" (didDismiss)="closeForm()" [initialBreakpoint]="0.65" [breakpoints]="[0, 0.65]">
+  <ng-template>
+    <ion-content class="form-modal-content">
+      <div class="form-wrap">
+        <p class="form-title">Leave a Review</p>
+        <div class="star-picker">
+          <span *ngFor="let n of [1,2,3,4,5]" class="star-pick" [class.on]="n <= stars" (click)="setStars(n)">★</span>
+        </div>
+        <ion-textarea
+          [(ngModel)]="comment"
+          placeholder="Share your experience…"
+          rows="4"
+          class="eatsy-textarea">
+        </ion-textarea>
+        <ion-button expand="block" class="btn-gold" (click)="submit()" [disabled]="submitting">
+          <ion-spinner *ngIf="submitting" name="crescent" slot="start"></ion-spinner>
+          {{ submitting ? 'Submitting…' : 'Submit Review' }}
+        </ion-button>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
