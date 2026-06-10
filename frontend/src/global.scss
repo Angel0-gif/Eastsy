@@ -126,6 +126,12 @@ ion-input, ion-textarea, ion-select {
   0%   { transform: scale(1);   opacity: 0.6; }
   100% { transform: scale(2.8); opacity: 0; }
 }
+.alert-message,
+.alert-title,
+ion-alert .alert-message,
+ion-alert .alert-head .alert-title {
+  color: #000000 !important;
+}
 
 // ── SCROLLBAR ─────────────────────────
 ::-webkit-scrollbar       { width: 3px; }

@@ -1,64 +1,83 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { 
   IonContent, 
   ToastController,
-  IonIcon // 1. Imported IonIcon component
+  IonIcon
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-// 2. Imported system layout definitions from ionicons types
 import { 
-  cartOutline, 
-  barChartOutline, 
-  bookOutline, 
-  easelOutline, 
-  trendingUpOutline,
-  chevronUpOutline,
-  chevronDownOutline,
-  callOutline
+  cartOutline, barChartOutline, bookOutline, easelOutline, 
+  trendingUpOutline, chevronUpOutline, chevronDownOutline, callOutline 
 } from 'ionicons/icons';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-admin-orders',
   standalone: true,
-  imports: [
-    CommonModule, 
-    FormsModule, 
-    IonContent,
-    IonIcon // 3. Added to standalone template configurations
-  ],
+  imports: [CommonModule, FormsModule, IonContent, IonIcon],
   templateUrl: './orders.page.html',
   styleUrls: ['./orders.page.scss'],
 })
-export class AdminOrdersPage {
+export class AdminOrdersPage implements OnInit, OnDestroy {
+  private refreshTimer: any;
   filterStatus = 'all';
-  statuses = ['all','received','confirmed','preparing','on_the_way','delivered','paid'];
-
-  orders = [
-    { id:'ESY-2051', table:4, items:[{name:'Grilled Salmon',qty:1},{name:'Mango Juice',qty:2}], total:'16,500', status:'preparing',  time:'8:42 PM', phone:'+237 670 001 001' },
-    { id:'ESY-2050', table:2, items:[{name:'Poulet DG',qty:1},{name:'Lemon Tart',qty:1}],       total:'12,000', status:'delivered',  time:'8:30 PM', phone:'+237 670 002 002' },
-    { id:'ESY-2049', table:7, items:[{name:'Ndolé',qty:2},{name:'Bissap',qty:2}],               total:'18,000', status:'received',   time:'8:15 PM', phone:'+237 670 003 003' },
-    { id:'ESY-2048', table:1, items:[{name:'Beef Brochettes',qty:1}],                           total:'6,000',  status:'paid',       time:'8:00 PM', phone:'+237 670 004 004' },
-    { id:'ESY-2047', table:5, items:[{name:'Caesar Salad',qty:1},{name:'Salmon',qty:1}],        total:'16,000', status:'delivered',  time:'7:45 PM', phone:'+237 670 005 005' },
-    { id:'ESY-2046', table:3, items:[{name:'Poulet DG',qty:2}],                                 total:'17,000', status:'paid',       time:'7:30 PM', phone:'+237 670 006 006' },
-  ];
-
-  expandedId: string | null = null;
+  statuses = ['all','received','confirmed','preparing','on_the_way','delivered'];
   statusFlow = ['received','confirmed','preparing','on_the_way','delivered'];
 
-  constructor(public router: Router, private toast: ToastController) {
-    // 4. Bound operational vector iconography markers inside standalone lifecycle registry
+  orders: any[] = [];   // ← now empty, filled from API
+  expandedId: string | null = null;
+
+  constructor(
+    public  router: Router,
+    private http:   HttpClient,   
+    private toast:  ToastController
+  ) {
     addIcons({
-      cartOutline,
-      barChartOutline,
-      bookOutline,
-      easelOutline,
-      trendingUpOutline,
-      chevronUpOutline,
-      chevronDownOutline,
-      callOutline
+      cartOutline, barChartOutline, bookOutline, easelOutline,
+      trendingUpOutline, chevronUpOutline, chevronDownOutline, callOutline
+    });
+  }
+
+ngOnInit() {
+  this.loadOrders();
+  this.refreshTimer = setInterval(() => this.loadOrders(), 5000); // every 30s
+}
+
+ngOnDestroy() {
+  if (this.refreshTimer) clearInterval(this.refreshTimer);
+}
+
+  loadOrders() {
+    this.http.get<any>(`${environment.apiUrl}/orders/`).subscribe({
+      next: res => {
+        const raw = res.results ?? res;
+        this.orders = raw.map((o: any) => ({
+          realId: o.id,                         // ← real numeric ID for API calls
+          id:     o.order_number,               // ← display ID e.g. ESY-2051
+          table:  o.table?.number ?? '—',
+          items:  o.items.map((i: any) => ({
+            name: i.menu_item?.name ?? 'Item',
+            qty:  i.quantity
+          })),
+          total:  Number(o.total).toLocaleString(),
+          status: o.status,
+          time:   new Date(o.created_at).toLocaleTimeString('en-US', {
+            hour: '2-digit', minute: '2-digit'
+          }),
+          phone: o.user_phone || '—',
+        }));
+      },
+      error: async () => {
+        const t = await this.toast.create({
+          message: 'Failed to load orders', duration: 2500,
+          position: 'top', color: 'danger'
+        });
+        await t.present();
+      }
     });
   }
 
@@ -68,14 +87,35 @@ export class AdminOrdersPage {
       : this.orders.filter(o => o.status === this.filterStatus);
   }
 
-  toggle(id: string) { this.expandedId = this.expandedId === id ? null : id; }
+  toggle(id: string) {
+    this.expandedId = this.expandedId === id ? null : id;
+  }
 
   async advance(order: any) {
     const idx = this.statusFlow.indexOf(order.status);
     if (idx < this.statusFlow.length - 1) {
-      order.status = this.statusFlow[idx + 1];
-      const t = await this.toast.create({ message:`Order ${order.id} → ${order.status}`, duration:2000, position:'top', color:'success' });
-      await t.present();
+      const nextStatus = this.statusFlow[idx + 1];
+
+      this.http.patch<any>(
+        `${environment.apiUrl}/orders/${order.realId}/set_status/`,
+        { status: nextStatus }
+      ).subscribe({
+        next: async () => {
+          order.status = nextStatus;
+          const t = await this.toast.create({
+            message: `Order ${order.id} → ${nextStatus}`,
+            duration: 2000, position: 'top', color: 'success'
+          });
+          await t.present();
+        },
+        error: async () => {
+          const t = await this.toast.create({
+            message: 'Status update failed', duration: 2500,
+            position: 'top', color: 'danger'
+          });
+          await t.present();
+        }
+      });
     }
   }
 

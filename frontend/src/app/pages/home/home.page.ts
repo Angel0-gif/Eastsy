@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import {
   IonContent, IonHeader, IonToolbar, IonTitle,
-  IonButtons, IonButton, IonIcon, IonRefresher, IonRefresherContent
+  IonButtons, IonButton, IonIcon, IonRefresher, IonRefresherContent,
+  AlertController,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-// Added new icon assets here
 import { 
   cartOutline, 
   notificationsOutline, 
@@ -43,8 +43,8 @@ export class HomePage implements OnInit {
     private orders: OrderService,
     public  cart:   CartService,
     private router: Router,
+    private alert:  AlertController,   // ← ADDED
   ) {
-    // Registered all the new page icons inside the registry
     addIcons({ 
       cartOutline, 
       notificationsOutline, 
@@ -71,6 +71,15 @@ export class HomePage implements OnInit {
   handleRefresh(event: any) {
     this.loadRecentOrders();
     setTimeout(() => event.target.complete(), 1000);
+  }
+
+  async openNotifications() {
+    const a = await this.alert.create({
+      header:  '🔔 Notifications',
+      message: 'No new notifications at the moment.',
+      buttons: ['OK'],
+    });
+    await a.present();
   }
 
   goTo(path: string) { this.router.navigate(['/tabs/' + path]); }

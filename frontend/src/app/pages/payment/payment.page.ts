@@ -1,106 +1,194 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { Subscription, interval } from 'rxjs';
+import { switchMap, takeWhile } from 'rxjs/operators';
 import {
-  IonContent, IonHeader, IonToolbar, IonTitle,
-  IonButton, IonSpinner, AlertController, ToastController,
-  IonIcon // 1. Imported IonIcon component
+  IonContent, IonIcon, IonButton, IonSpinner,
+  IonHeader, IonToolbar, IonTitle,
+  AlertController, ToastController, LoadingController,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-// 2. Imported specific system icons used on this page
-import { walletOutline, cardOutline, cashOutline, lockClosedOutline } from 'ionicons/icons';
+import {
+  cardOutline, phonePortraitOutline, restaurantOutline,
+  checkmarkCircleOutline, closeCircleOutline, lockClosedOutline,
+} from 'ionicons/icons';
 import { CartService } from '../../services/cart.service';
-import { PaymentService } from '../../services/payment.service';
-import { PaymentMethod } from '../../models';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-payment',
   standalone: true,
   imports: [
-    CommonModule, 
-    FormsModule,
-    IonContent, IonHeader, IonToolbar, IonTitle,
-    IonButton, IonSpinner,
-    IonIcon // 3. Added to standalone template declarations
+    CommonModule, FormsModule,
+    IonContent, IonIcon, IonButton, IonSpinner,
+    IonHeader, IonToolbar, IonTitle,
   ],
   templateUrl: './payment.page.html',
-  styleUrls:   ['./payment.page.scss'],
+  styleUrls:  ['./payment.page.scss'],
 })
-export class PaymentPage {
-  selectedMethod: PaymentMethod = 'momo';
-  loading   = false;
+export class PaymentPage implements OnInit, OnDestroy {
 
-  // 4. Mapped method structures directly to the imported Ionic icons
+  // ← public so the HTML template can access them
+  public cart      = inject(CartService);
+  private http     = inject(HttpClient);
+  private router   = inject(Router);
+  private alert    = inject(AlertController);
+  private toast    = inject(ToastController);
+  private loadCtrl = inject(LoadingController);
+
+  selectedMethod = 'momo';
+  momoOperator   = 'mtn';
+  momoPhone      = '';
+  cardNumber     = '';
+  cardExpiry     = '';
+  cardCvv        = '';
+  cardName       = '';
+  loading        = false;
+
   methods = [
-    { id: 'momo'  as PaymentMethod, icon: 'wallet-outline',      name: 'Mobile Money',       sub: 'MTN MoMo · Orange Money' },
-    { id: 'card'  as PaymentMethod, icon: 'card-outline',        name: 'Debit / Credit Card', sub: 'Visa · Mastercard' },
-    { id: 'table' as PaymentMethod, icon: 'cash-outline',        name: 'Pay at Table',        sub: 'Cash or POS terminal' },
+    { id: 'momo',  name: 'Mobile Money', sub: 'MTN MoMo / Orange Money', icon: 'phone-portrait-outline' },
+    { id: 'table', name: 'Pay at Table', sub: 'Cash or POS on arrival',  icon: 'restaurant-outline'     },
   ];
-  
-  momoOperator = 'mtn';
-  momoPhone    = '';
-  cardNumber   = '';
-  cardExpiry   = '';
-  cardCvv      = '';
-  cardName     = '';
 
-  constructor(
-    public  cart:       CartService,
-    private paymentSvc: PaymentService,
-    private alert:      AlertController,
-    private toast:      ToastController,
-  ) {
-    // 5. Registered all icons in the layout engine boundary
-    addIcons({ walletOutline, cardOutline, cashOutline, lockClosedOutline });
+  private pollSub?: Subscription;
+
+  constructor() {
+    addIcons({
+      cardOutline, phonePortraitOutline, restaurantOutline,
+      checkmarkCircleOutline, closeCircleOutline, lockClosedOutline,
+    });
   }
 
-  selectMethod(m: PaymentMethod) { this.selectedMethod = m; }
+  ngOnInit() {}
+
+  ngOnDestroy() {
+    this.pollSub?.unsubscribe();
+  }
+
+  selectMethod(id: string) {
+    this.selectedMethod = id;
+  }
 
   async pay() {
     if (this.cart.itemCount() === 0) {
-      const t = await this.toast.create({ message: 'Your cart is empty', duration: 2000, position: 'top', color: 'warning' });
-      await t.present(); return;
+      await this.showToast('Your cart is empty.', 'warning');
+      return;
     }
 
-    if (this.selectedMethod === 'momo' && this.momoPhone.length < 9) {
-      const t = await this.toast.create({ message: 'Please enter a valid mobile number', duration: 2000, position: 'top', color: 'warning' });
-      await t.present(); return;
+    if (this.selectedMethod === 'momo' && !this.momoPhone) {
+      await this.showToast('Please enter your MoMo phone number.', 'warning');
+      return;
     }
 
-    if (this.selectedMethod === 'card') {
-      if (this.cardNumber.length < 16) {
-        const t = await this.toast.create({ message: 'Please enter a valid card number', duration: 2000, position: 'top', color: 'warning' });
-        await t.present(); return;
-      }
-      if (!this.cardExpiry || !this.cardCvv) {
-        const t = await this.toast.create({ message: 'Please fill in all card details', duration: 2000, position: 'top', color: 'warning' });
-        await t.present(); return;
-      }
-    }
+    const loader = await this.loadCtrl.create({ message: 'Creating order…' });
+    await loader.present();
 
-    this.loading = true;
-    this.paymentSvc.initiate({
-      order_id:     1,
-      method:       this.selectedMethod,
-      phone_number: this.selectedMethod === 'momo'
-        ? `+237${this.momoPhone}`
-        : undefined,
-    }).subscribe({
-      next: async () => {
-        this.loading = false;
-        this.cart.clear();
-        const a = await this.alert.create({
-          header:  '✅ Payment Successful!',
-          message: `Your payment of ${this.cart.total().toLocaleString()} XAF has been processed. Receipt sent to your email.`,
-          buttons: ['Done'],
-        });
-        await a.present();
+    const orderPayload = {
+      items: this.cart.items().map((ci: any) => ({
+        menu_item_id: ci.menu_item.id,
+        quantity:     ci.quantity,
+      })),
+    };
+
+    this.http.post<any>(`${environment.apiUrl}/orders/`, orderPayload).subscribe({
+      next: async (order) => {
+        await loader.dismiss();
+        this.processPayment(order);
       },
       error: async () => {
-        this.loading = false;
-        const t = await this.toast.create({ message: 'Payment failed. Please try again.', duration: 2500, position: 'top', color: 'danger' });
-        await t.present();
+        await loader.dismiss();
+        await this.showToast('Could not create order. Please try again.', 'danger');
       },
     });
+  }
+
+  private async processPayment(order: any) {
+    const loader = await this.loadCtrl.create({ message: 'Initiating payment…' });
+    await loader.present();
+
+    const payload: any = {
+      order_id: order.id,
+      method:   this.selectedMethod,
+    };
+
+    if (this.selectedMethod === 'momo') {
+      const phone = this.momoPhone.startsWith('237')
+        ? this.momoPhone
+        : `237${this.momoPhone}`;
+      payload.phone_number = phone;
+    }
+
+    this.http.post<any>(`${environment.apiUrl}/payments/initiate/`, payload).subscribe({
+      next: async (res) => {
+        await loader.dismiss();
+        if (res.status === 'pending') {
+          await this.showMomoWaitingAlert();
+          this.startPolling(res.reference);
+        } else {
+          this.cart.clear();
+          await this.showSuccessAlert();
+        }
+      },
+      error: async (err) => {
+        await loader.dismiss();
+        const msg = err?.error?.detail || 'Payment failed. Please try again.';
+        await this.showToast(msg, 'danger');
+      },
+    });
+  }
+
+  private startPolling(reference: string) {
+    this.pollSub = interval(5000).pipe(
+      switchMap(() =>
+        this.http.get<any>(`${environment.apiUrl}/payments/status/${reference}/`)
+      ),
+      takeWhile((res) => res.status === 'pending', true),
+    ).subscribe({
+      next: async (res) => {
+        if (res.status === 'success') {
+          this.pollSub?.unsubscribe();
+          this.cart.clear();
+          await this.showSuccessAlert();
+        } else if (res.status === 'failed') {
+          this.pollSub?.unsubscribe();
+          await this.showToast('Payment was declined or timed out. Please try again.', 'danger');
+        }
+      },
+      error: () => {},
+    });
+  }
+
+  private async showMomoWaitingAlert() {
+    const phone = this.momoPhone.startsWith('237')
+      ? this.momoPhone
+      : `237${this.momoPhone}`;
+    const a = await this.alert.create({
+      header:  '📱 Check Your Phone',
+      message: `A payment prompt has been sent to +${phone}. Please approve it within 2 minutes.`,
+      buttons: ['OK'],
+    });
+    await a.present();
+  }
+
+  private async showSuccessAlert() {
+    const a = await this.alert.create({
+      header:  '✅ Payment Successful!',
+      message: 'Your order has been confirmed. Bon appétit! 🍽️',
+      buttons: [{
+        text:    'Track Order',
+        handler: () => this.router.navigate(['/tabs/tracking']),
+      }],
+    });
+    await a.present();
+  }
+
+  private async showToast(message: string, color = 'success') {
+    const t = await this.toast.create({
+      message, duration: 3000, position: 'top', color,
+    });
+    await t.present();
   }
 }

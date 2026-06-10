@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -25,7 +25,9 @@ interface Table {
   templateUrl: './reservation.page.html',
   styleUrls:   ['./reservation.page.scss'],
 })
-export class ReservationPage implements OnInit {
+export class ReservationPage implements OnInit, OnDestroy{
+  today = new Date().toISOString().split('T')[0];
+
   date             = new Date().toISOString().split('T')[0];
   time             = '19:00';
   guests           = 2;
@@ -34,6 +36,7 @@ export class ReservationPage implements OnInit {
   selectedTableId: number | null = null;
   loading          = false;
   tablesLoading    = false;
+  private refreshTimer: any;
 
   timeSlots = [
     { label: '12:00 PM', value: '12:00', available: false },
@@ -53,10 +56,14 @@ export class ReservationPage implements OnInit {
     private toast: ToastController,
   ) {}
 
-  ngOnInit() { this.loadTables(); }
+  ngOnInit() { 
+    this.loadTables();
+    // Auto-refresh every 30 seconds
+    this.refreshTimer = setInterval(() => this.loadTables(), 30000);
+  }
 
-  get today(): string {
-    return new Date().toISOString().split('T')[0];
+  ngOnDestroy() {
+    if (this.refreshTimer) clearInterval(this.refreshTimer);
   }
 
   // ── Always loads LIVE table data from backend ─────────────

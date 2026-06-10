@@ -78,6 +78,9 @@
     }
   },
   "cli": {
-    "analytics": "fcae7388-cd76-4322-9b03-77b950be43e3"
+    "analytics": "fcae7388-cd76-4322-9b03-77b950be43e3",
+    "cache": {
+      "enabled": false
+    }
   }
 }

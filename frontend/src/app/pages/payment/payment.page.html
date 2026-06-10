@@ -58,27 +58,6 @@
     </p>
   </div>
 
-  <div class="card-form" *ngIf="selectedMethod === 'card'">
-    <label class="field-label">Card Number</label>
-    <input class="eatsy-input" type="text" placeholder="1234 5678 9012 3456"
-      [(ngModel)]="cardNumber" maxlength="19">
-    <div class="card-row">
-      <div class="card-field">
-        <label class="field-label">Expiry</label>
-        <input class="eatsy-input" type="text" placeholder="MM/YY"
-          [(ngModel)]="cardExpiry" maxlength="5">
-      </div>
-      <div class="card-field">
-        <label class="field-label">CVV</label>
-        <input class="eatsy-input" type="password" placeholder="•••"
-          [(ngModel)]="cardCvv" maxlength="3">
-      </div>
-    </div>
-    <label class="field-label" style="margin-top:10px;">Cardholder Name</label>
-    <input class="eatsy-input" type="text" placeholder="Full name on card"
-      [(ngModel)]="cardName">
-  </div>
-
   <div class="page-footer">
     <ion-button expand="block" class="btn-gold" (click)="pay()" [disabled]="loading || cart.itemCount() === 0">
       <ion-spinner *ngIf="loading" name="crescent" slot="start"></ion-spinner>

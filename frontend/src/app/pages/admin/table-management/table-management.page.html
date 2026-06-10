@@ -9,24 +9,6 @@
       <button class="add-btn" (click)="openAdd()">+ Add Table</button>
     </div>
 
-    <div class="admin-nav">
-      <div class="nav-item" (click)="go('dashboard')">
-        <ion-icon name="bar-chart-outline"></ion-icon> Dashboard
-      </div>
-      <div class="nav-item" (click)="go('menu')">
-        <ion-icon name="book-outline"></ion-icon> Menu
-      </div>
-      <div class="nav-item active" (click)="go('tables')">
-        <ion-icon name="easel-outline"></ion-icon> Tables
-      </div>
-      <div class="nav-item" (click)="go('orders')">
-        <ion-icon name="cart-outline"></ion-icon> Orders
-      </div>
-      <div class="nav-item" (click)="go('reports')">
-        <ion-icon name="trending-up-outline"></ion-icon> Reports
-      </div>
-    </div>
-
     <div class="summary-row">
       <div class="sum-card green"><span class="sum-val">{{ summary.available }}</span><span class="sum-lbl">Available</span></div>
       <div class="sum-card red"><span class="sum-val">{{ summary.occupied }}</span><span class="sum-lbl">Occupied</span></div>

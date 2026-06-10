@@ -9,24 +9,6 @@
       <button class="add-btn" (click)="openAdd()">+ Add Item</button>
     </div>
 
-    <div class="admin-nav">
-      <div class="nav-item" (click)="go('dashboard')">
-        <ion-icon name="bar-chart-outline"></ion-icon> Dashboard
-      </div>
-      <div class="nav-item active" (click)="go('menu')">
-        <ion-icon name="book-outline"></ion-icon> Menu
-      </div>
-      <div class="nav-item" (click)="go('tables')">
-        <ion-icon name="easel-outline"></ion-icon> Tables
-      </div>
-      <div class="nav-item" (click)="go('orders')">
-        <ion-icon name="cart-outline"></ion-icon> Orders
-      </div>
-      <div class="nav-item" (click)="go('reports')">
-        <ion-icon name="trending-up-outline"></ion-icon> Reports
-      </div>
-    </div>
-
     <div class="cat-row">
       <div *ngFor="let c of categories"
         class="cat-pill" [class.active]="filterCat === c"

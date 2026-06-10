@@ -24,38 +24,40 @@ export const routes: Routes = [
   },
 
   // ── ADMIN (protected — is_admin=true only) ─────────
-  {
-    path: 'admin',
-    canActivate: [adminGuard],
-    children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      {
-        path: 'dashboard',
-        loadComponent: () =>
-          import('./pages/admin/dashboard/dashboard.page').then(m => m.AdminDashboardPage),
-      },
-      {
-        path: 'menu',
-        loadComponent: () =>
-          import('./pages/admin/menu-management/menu-management.page').then(m => m.AdminMenuPage),
-      },
-      {
-        path: 'tables',
-        loadComponent: () =>
-          import('./pages/admin/table-management/table-management.page').then(m => m.AdminTablesPage),
-      },
-      {
-        path: 'orders',
-        loadComponent: () =>
-          import('./pages/admin/orders/orders.page').then(m => m.AdminOrdersPage),
-      },
-      {
-        path: 'reports',
-        loadComponent: () =>
-          import('./pages/admin/reports/reports.page').then(m => m.AdminReportsPage),
-      },
-    ],
-  },
+{
+  path: 'admin',
+  canActivate: [adminGuard],
+  loadComponent: () =>
+    import('./pages/admin/tabs/admin-tabs.page').then(m => m.AdminTabsPage),
+  children: [
+    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+    {
+      path: 'dashboard',
+      loadComponent: () =>
+        import('./pages/admin/dashboard/dashboard.page').then(m => m.AdminDashboardPage),
+    },
+    {
+      path: 'menu',
+      loadComponent: () =>
+        import('./pages/admin/menu-management/menu-management.page').then(m => m.AdminMenuPage),
+    },
+    {
+      path: 'tables',
+      loadComponent: () =>
+        import('./pages/admin/table-management/table-management.page').then(m => m.AdminTablesPage),
+    },
+    {
+      path: 'orders',
+      loadComponent: () =>
+        import('./pages/admin/orders/orders.page').then(m => m.AdminOrdersPage),
+    },
+    {
+      path: 'reports',
+      loadComponent: () =>
+        import('./pages/admin/reports/reports.page').then(m => m.AdminReportsPage),
+    },
+  ],
+},
 
   // ── CUSTOMER APP (protected — logged in) ───────────
   {

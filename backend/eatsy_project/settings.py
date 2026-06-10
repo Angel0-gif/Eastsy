@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from datetime import timedelta
 from decouple import config
@@ -131,3 +132,26 @@ SPECTACULAR_SETTINGS = {
     'VERSION':     '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
 }
+MTN_MOMO_SUBSCRIPTION_KEY = config('MTN_MOMO_SUBSCRIPTION_KEY')
+MTN_MOMO_API_USER         = config('MTN_MOMO_API_USER')
+MTN_MOMO_API_KEY          = config('MTN_MOMO_API_KEY')
+
+import dj_database_url
+import os
+
+# Railway database
+if os.environ.get('DATABASE_URL'):
+    DATABASES['default'] = dj_database_url.config(
+        conn_max_age=600,
+        ssl_require=True,
+    )
+
+# Static files
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+
+# Allow Railway domain
+ALLOWED_HOSTS += ['.railway.app', '.up.railway.app']
+
+# CORS for mobile app
+CORS_ALLOW_ALL_ORIGINS = True

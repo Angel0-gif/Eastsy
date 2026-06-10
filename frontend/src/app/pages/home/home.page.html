@@ -6,7 +6,7 @@
         <ion-icon name="cart-outline" [class]="cart.itemCount() > 0 ? 'icon-gold' : ''"></ion-icon>
         <span *ngIf="cart.itemCount() > 0" class="cart-badge">{{ cart.itemCount() }}</span>
       </ion-button>
-      <ion-button><ion-icon name="notifications-outline"></ion-icon></ion-button>
+      <ion-button><ion-icon name="notifications-outline" (click)="openNotifications()"></ion-icon></ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>

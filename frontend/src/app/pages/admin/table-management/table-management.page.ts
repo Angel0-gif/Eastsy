@@ -38,7 +38,7 @@ interface TableItem {
   styleUrls:   ['./table-management.page.scss'],
 })
 export class AdminTablesPage implements OnInit {
-
+  private refreshTimer: any;
   tables: TableItem[] = [];
   loading = false;
 
@@ -67,7 +67,10 @@ export class AdminTablesPage implements OnInit {
     });
   }
 
-  ngOnInit() { this.loadTables(); }
+  ngOnInit() {
+  this.loadTables();
+  this.refreshTimer = setInterval(() => this.loadTables(), 5000); // every 30s
+}
 
   loadTables() {
     this.loading = true;
@@ -153,7 +156,10 @@ export class AdminTablesPage implements OnInit {
         table.status = res.status;
         this.showToast(`Table ${table.number} → ${res.status}`, 'success');
       },
-      error: () => this.showToast('Status update failed', 'danger'),
+      error: (err) => {
+      // Show what's actually failing
+      this.showToast(`Failed: ${err.status} ${err.error?.detail || ''}`, 'danger');
+    },
     });
   }
 

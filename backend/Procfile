@@ -1,0 +1,1 @@
+web: gunicorn eatsy_project.wsgi:application

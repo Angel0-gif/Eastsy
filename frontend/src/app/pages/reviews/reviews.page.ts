@@ -72,30 +72,21 @@ export class ReviewsPage implements OnInit {
   closeForm() { this.formOpen = false; }
 
   async submit() {
-    if (!this.comment.trim()) {
-      const t = await this.toast.create({ message: 'Please write a comment', duration: 2000, position: 'top', color: 'warning' });
-      await t.present(); return;
-    }
-    this.submitting = true;
-    this.reviewSvc.create({ rating: this.stars, comment: this.comment }).subscribe({
-      next: async () => {
-        this.submitting = false;
-        this.closeForm();
-        this.comment = '';
-        this.stars   = 4;
-        this.load();
-        const a = await this.alert.create({
-          header: '⭐ Thank You!',
-          message: `Your ${this.stars}-star review has been submitted. We appreciate your feedback!`,
-          buttons: ['Close'], cssClass: 'eatsy-alert',
-        });
-        await a.present();
-      },
-      error: async () => {
-        this.submitting = false;
-        const t = await this.toast.create({ message: 'Submission failed. Try again.', duration: 2500, position: 'top', color: 'danger' });
-        await t.present();
-      },
-    });
-  }
+  const submittedStars = this.stars;  // ← save before reset
+  this.reviewSvc.create({ rating: this.stars, comment: this.comment }).subscribe({
+    next: async () => {
+      this.submitting = false;
+      this.closeForm();
+      this.comment = '';
+      this.stars   = 4;
+      this.load();
+      const a = await this.alert.create({
+        header:  '⭐ Thank You!',
+        message: `Your ${submittedStars}-star review has been submitted!`,  // ← use saved value
+        buttons: ['Close'],
+      });
+      await a.present();
+    },
+  });
+}
 }

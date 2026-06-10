@@ -1,28 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import {
   IonContent, IonHeader, IonToolbar, IonTitle, IonButton,
-  IonIcon,
-  AlertController,
-  ToastController
+  IonIcon, AlertController, ToastController
 } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
-// ✅ Cleaned up the unused duplicate restaurantOutline import from here
-
 import { 
-  cameraOutline, 
-  calendarOutline, 
-  timeOutline, 
-  starOutline, 
-  cardOutline, 
-  notificationsOutline, 
-  earthOutline, 
-  lockClosedOutline, 
-  logOutOutline, 
-  mapOutline,
-  chevronForwardOutline 
+  cameraOutline, calendarOutline, timeOutline, starOutline, 
+  cardOutline, notificationsOutline, earthOutline, lockClosedOutline, 
+  logOutOutline, mapOutline, chevronForwardOutline 
 } from 'ionicons/icons';
 import { AuthService, User } from '../../services/auth.service';
 import { HttpClient } from '@angular/common/http';
@@ -32,49 +20,90 @@ import { environment } from '../../../environments/environment';
   selector: 'app-profile',
   standalone: true,
   imports: [
-    CommonModule,
-    FormsModule,
-    IonContent, IonHeader, IonToolbar, IonTitle, IonButton,
-    IonIcon
+    CommonModule, FormsModule,
+    IonContent, IonHeader, IonToolbar, IonTitle, IonButton, IonIcon
   ],
   templateUrl: './profile.page.html',
   styleUrls:   ['./profile.page.scss'],
 })
-export class ProfilePage {
+export class ProfilePage implements OnInit {
   get user(): User | null { return this.auth.currentUser(); }
 
-  menuItems = [
-    { icon: 'calendar-outline', label: 'My Reservations', value: '3 upcoming',  route: 'reservation' },
-    { icon: 'time-outline',     label: 'Order History',    value: '12 orders',   route: 'tracking' },
-    { icon: 'star-outline',     label: 'Loyalty Points',   value: `${this.auth.currentUser()?.loyalty_points ?? 0} pts`, route: null },
-    { icon: 'card-outline',     label: 'Payment Methods',  value: '2 saved',     route: null },
-  ];
+  // Real counts loaded from API
+  reservationCount = '…';
+  orderCount       = '…';
+  loyaltyPoints    = '…';
+
+  get menuItems() {
+    return [
+      { icon: 'calendar-outline', label: 'My Reservations', value: this.reservationCount, route: 'reservation' },
+      { icon: 'time-outline',     label: 'Order History',    value: this.orderCount,       route: 'tracking'    },
+      { icon: 'star-outline',     label: 'Loyalty Points',   value: this.loyaltyPoints,    route: null          },
+      { icon: 'card-outline',     label: 'Payment Methods',  value: '—',                   route: null          },
+    ];
+  }
 
   settings = [
-    { icon: 'notifications-outline', label: 'Notifications',    value: 'All on' },
-    { icon: 'earth-outline',         label: 'Language',         value: 'English' },
-    { icon: 'lock-closed-outline',   label: 'Privacy & Security', value: '' },
+    { icon: 'notifications-outline', label: 'Notifications',     value: 'All on'  },
+    { icon: 'earth-outline',         label: 'Language',          value: 'English' },
+    { icon: 'lock-closed-outline',   label: 'Privacy & Security', value: ''       },
   ];
 
   constructor(
     public  auth:   AuthService,
     private router: Router,
     private alert:  AlertController,
-    private http:   HttpClient,  
+    private http:   HttpClient,
     private toast:  ToastController,
   ) {
     addIcons({
-      cameraOutline,
-      calendarOutline,
-      timeOutline,
-      starOutline,
-      cardOutline,
-      notificationsOutline,
-      earthOutline,
-      lockClosedOutline,
-      logOutOutline,
-      mapOutline,
-      chevronForwardOutline
+      cameraOutline, calendarOutline, timeOutline, starOutline,
+      cardOutline, notificationsOutline, earthOutline, lockClosedOutline,
+      logOutOutline, mapOutline, chevronForwardOutline
+    });
+  }
+
+  ngOnInit() {
+    this.loadStats();
+  }
+
+  loadStats() {
+    // Load reservation count
+    this.http.get<any>(`${environment.apiUrl}/reservations/`).subscribe({
+      next: res => {
+        const all = res.results ?? res;
+        const upcoming = all.filter((r: any) =>
+          ['confirmed', 'pending'].includes(r.status)
+        ).length;
+        this.reservationCount = `${upcoming} upcoming`;
+      },
+      error: () => { this.reservationCount = '—'; }
+    });
+
+    // Load order count
+    this.http.get<any>(`${environment.apiUrl}/orders/`).subscribe({
+      next: res => {
+        const all = res.results ?? res;
+        this.orderCount = `${all.length} orders`;
+      },
+      error: () => { this.orderCount = '—'; }
+    });
+
+    // Load loyalty points from user profile
+    this.http.get<any>(`${environment.apiUrl}/auth/me/`).subscribe({
+      next: res => {
+        this.loyaltyPoints = `${res.loyalty_points ?? 0} pts`;
+        // Also update the stored user object
+        const current = this.auth.currentUser();
+        if (current) {
+          const updated = { ...current, loyalty_points: res.loyalty_points };
+          this.auth.currentUser.set(updated);
+          localStorage.setItem('eatsy_user', JSON.stringify(updated));
+        }
+      },
+      error: () => {
+        this.loyaltyPoints = `${this.auth.currentUser()?.loyalty_points ?? 0} pts`;
+      }
     });
   }
 
@@ -86,7 +115,6 @@ export class ProfilePage {
     const input = event.target as HTMLInputElement;
     if (!input.files?.length) return;
     const file = input.files[0];
-
     const formData = new FormData();
     formData.append('avatar', file);
 
@@ -117,7 +145,7 @@ export class ProfilePage {
       header:  'Log Out',
       message: 'Are you sure you want to log out?',
       buttons: [
-        { text: 'Cancel', role: 'cancel' },
+        { text: 'Cancel',  role: 'cancel' },
         { text: 'Log Out', role: 'confirm', handler: () => this.auth.logout() },
       ],
       cssClass: 'eatsy-alert',

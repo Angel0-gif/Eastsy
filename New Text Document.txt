@@ -1,0 +1,13 @@
+Name
+eatsy-collection
+Rename
+Started on
+06/10/2026
+Primary key
+f5042c35eaa64027b7f5156409d5c142
+Hide | Regenerate
+Secondary key
+a6ab068e7f274266baaa798781bbea81
+Hide | Regenerate
+Collection Widget | Receive mobile money payments on your website through a USSD or QR code
+Active

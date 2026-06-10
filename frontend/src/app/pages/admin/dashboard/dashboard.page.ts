@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy  } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { 
   IonContent, 
-  IonIcon // 1. Imported IonIcon component
+  IonIcon
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-// 2. Imported explicit system assets for navigation, metrics, and actions
 import { 
   settingsOutline,
   barChartOutline, 
@@ -19,36 +19,27 @@ import {
   addOutline,
   documentTextOutline
 } from 'ionicons/icons';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [
-    CommonModule, 
-    IonContent,
-    IonIcon // 3. Registered IonIcon inside imports boundary
-  ],
+  imports: [CommonModule, IonContent, IonIcon],
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
 })
-export class AdminDashboardPage implements OnInit {
+export class AdminDashboardPage implements OnInit, OnDestroy {
   today = new Date();
+  private refreshTimer: any;
 
-  // 4. Mapped stat objects to structural asset tracking strings
   stats = [
-    { label: 'Orders Today',   value: '24',    icon: 'cart-outline',          trend: '+3',   up: true },
-    { label: 'Revenue Today',  value: '186k',  icon: 'cash-outline',          trend: '+12%', up: true },
-    { label: 'Reservations',   value: '8',     icon: 'calendar-outline',      trend: '+2',   up: true },
-    { label: 'Tables Active',  value: '5/8',   icon: 'easel-outline',         trend: '',     up: true },
+    { label: 'Orders Today',   value: '—',   icon: 'cart-outline',     trend: '', up: true },
+    { label: 'Revenue Today',  value: '—',   icon: 'cash-outline',     trend: '', up: true },
+    { label: 'Reservations',   value: '—',   icon: 'calendar-outline', trend: '', up: true },
+    { label: 'Tables Active',  value: '—',   icon: 'easel-outline',    trend: '', up: true },
   ];
 
-  recentOrders = [
-    { id: 'ESY-2051', table: 4, items: 3, total: '24,500', status: 'preparing',  time: '8:42 PM' },
-    { id: 'ESY-2050', table: 2, items: 2, total: '16,000', status: 'delivered',  time: '8:30 PM' },
-    { id: 'ESY-2049', table: 7, items: 4, total: '31,500', status: 'received',   time: '8:15 PM' },
-    { id: 'ESY-2048', table: 1, items: 1, total: '8,500',  status: 'delivered',  time: '8:00 PM' },
-    { id: 'ESY-2047', table: 5, items: 3, total: '19,000', status: 'paid',       time: '7:45 PM' },
-  ];
+  recentOrders: any[] = [];
 
   menuItems = [
     { name: 'Ndolé & Plantains', cat: 'Main',    price: '7,500',  available: true  },
@@ -58,23 +49,66 @@ export class AdminDashboardPage implements OnInit {
     { name: 'Lemon Tart',        cat: 'Dessert', price: '3,500',  available: true  },
   ];
 
-  constructor(public router: Router) {
-    // 5. Registered asset values cleanly in constructor lifecycle runtime builder
+  constructor(
+    public  router: Router,
+    private http:   HttpClient,
+  ) {
     addIcons({
-      settingsOutline,
-      barChartOutline,
-      bookOutline,
-      easelOutline,
-      cartOutline,
-      trendingUpOutline,
-      cashOutline,
-      calendarOutline,
-      addOutline,
-      documentTextOutline
+      settingsOutline, barChartOutline, bookOutline, easelOutline,
+      cartOutline, trendingUpOutline, cashOutline, calendarOutline,
+      addOutline, documentTextOutline
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  this.loadDashboard();
+  this.refreshTimer = setInterval(() => this.loadDashboard(), 5000);
+  }
+
+  ngOnDestroy() {
+    if (this.refreshTimer) {
+      clearInterval(this.refreshTimer);
+    }
+  }
+
+  loadDashboard() {
+    // Load dashboard stats
+    this.http.get<any>(`${environment.apiUrl}/reports/dashboard/`).subscribe({
+      next: res => {
+        this.stats[0].value = String(res.orders_today);
+        this.stats[1].value = res.revenue_today > 0 ? (res.revenue_today / 1000).toFixed(0) + 'k XAF' : '0 XAF';
+        this.stats[2].value = String(res.reservations_today);
+        // First get total tables count
+this.http.get<any>(`${environment.apiUrl}/tables/`).subscribe({
+  next: tables => {
+    const total = (tables.results ?? tables).length;
+    this.stats[3].value = `${res.tables_occupied}/${total}`;
+  },
+  error: () => {
+    this.stats[3].value = `${res.tables_occupied}/12`;
+  }
+});
+      },
+      error: () => {} // keep default '—' values on error
+    });
+
+    // Load recent orders
+    this.http.get<any>(`${environment.apiUrl}/orders/`).subscribe({
+      next: res => {
+        const raw = res.results ?? res;
+        this.recentOrders = raw.slice(0, 5).map((o: any) => ({
+          id:     o.order_number,
+          table:  o.table?.number ?? '—',
+          total:  Number(o.total).toLocaleString(),
+          status: o.status,
+          time:   new Date(o.created_at).toLocaleTimeString('en-US', {
+            hour: '2-digit', minute: '2-digit'
+          }),
+        }));
+      },
+      error: () => {}
+    });
+  }
 
   go(path: string) { this.router.navigate(['/admin/' + path]); }
   logout()         { this.router.navigate(['/']); }
