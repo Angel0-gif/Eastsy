@@ -4,9 +4,25 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import {
-  IonContent, IonButton,
-  AlertController, ToastController
+  IonContent, 
+  IonButton,
+  IonIcon, // 1. Dynamic architectural component resolution 
+  AlertController, 
+  ToastController
 } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+// 2. Vector definitions imported for standalone runtime contexts
+import { 
+  bookOutline, 
+  barChartOutline, 
+  easelOutline, 
+  cartOutline, 
+  trendingUpOutline, 
+  createOutline, 
+  trashOutline,
+  checkmarkCircle,
+  closeCircle
+} from 'ionicons/icons';
 import { environment } from '../../../../environments/environment';
 
 interface MenuItem {
@@ -23,7 +39,7 @@ interface MenuItem {
 @Component({
   selector:    'app-admin-menu',
   standalone:  true,
-  imports:     [CommonModule, FormsModule, IonContent, IonButton],
+  imports:     [CommonModule, FormsModule, IonContent, IonButton, IonIcon], // 3. Registered inside definition layout
   templateUrl: './menu-management.page.html',
   styleUrls:   ['./menu-management.page.scss'],
 })
@@ -54,11 +70,23 @@ export class AdminMenuPage implements OnInit {
     private alert:  AlertController,
     private toast:  ToastController,
     private http:   HttpClient,
-  ) {}
+  ) {
+    // 4. Bound operational system layers into the component context setup
+    addIcons({
+      bookOutline,
+      barChartOutline,
+      easelOutline,
+      cartOutline,
+      trendingUpOutline,
+      createOutline,
+      trashOutline,
+      checkmarkCircle,
+      closeCircle
+    });
+  }
 
   ngOnInit() { this.loadItems(); }
 
-  // ── HttpClient automatically uses the auth interceptor ──────
   loadItems() {
     this.loading = true;
     this.http.get<any>(`${environment.apiUrl}/menu/items/`).subscribe({

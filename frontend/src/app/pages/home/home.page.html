@@ -16,7 +16,6 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <!-- HERO CARD -->
   <div class="hero-card">
     <p class="greeting">Welcome back,</p>
     <h2 class="user-name">{{ user?.full_name }}</h2>
@@ -37,38 +36,46 @@
     </div>
   </div>
 
-  <!-- QUICK ACCESS -->
   <p class="sec-title">Quick Access</p>
   <div class="qa-grid">
     <div class="qa" (click)="goTo('menu')">
-      <span class="qa-icon">📖</span>
+      <span class="qa-icon">
+        <ion-icon name="book-outline"></ion-icon>
+      </span>
       <p class="qa-lbl">Browse Menu</p>
       <p class="qa-sub">Today's selection</p>
     </div>
     <div class="qa" (click)="goTo('reservation')">
-      <span class="qa-icon">📅</span>
+      <span class="qa-icon">
+        <ion-icon name="calendar-outline"></ion-icon>
+      </span>
       <p class="qa-lbl">Reserve Table</p>
       <p class="qa-sub">Book in seconds</p>
     </div>
     <div class="qa" (click)="goTo('tracking')">
-      <span class="qa-icon">📍</span>
+      <span class="qa-icon">
+        <ion-icon name="locate-outline"></ion-icon>
+      </span>
       <p class="qa-lbl">Track Order</p>
       <p class="qa-sub">Live updates</p>
     </div>
     <div class="qa" (click)="goTo('reviews')">
-      <span class="qa-icon">⭐</span>
+      <span class="qa-icon">
+        <ion-icon name="star-outline"></ion-icon>
+      </span>
       <p class="qa-lbl">Reviews</p>
       <p class="qa-sub">Rate your meal</p>
     </div>
   </div>
 
-  <!-- RECENT ORDERS -->
   <p class="sec-title">Recent Orders</p>
   <div *ngIf="recentOrders.length === 0" class="empty-state">
     <p>No orders yet — <span class="link-gold" (click)="goTo('menu')">browse the menu</span></p>
   </div>
   <div *ngFor="let order of recentOrders" class="order-card" (click)="goTo('tracking')">
-    <div class="order-icon">🍽️</div>
+    <div class="order-icon">
+      <ion-icon name="restaurant-outline"></ion-icon>
+    </div>
     <div class="order-info">
       <p class="order-name">Order #{{ order.order_number }}</p>
       <p class="order-det">{{ order.created_at | date:'d MMM · h:mm a' }} · Table {{ order.table?.number }}</p>

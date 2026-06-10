@@ -4,9 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import {
   IonContent, IonButton, IonInput, IonSpinner,
-  ToastController
+  ToastController,
+  IonIcon // 1. Import IonIcon
 } from '@ionic/angular/standalone';
 import { AuthService } from '../../services/auth.service';
+
+// 2. Import addIcons and the specific icon
+import { addIcons } from 'ionicons';
+import { restaurantOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-login',
@@ -19,6 +24,7 @@ import { AuthService } from '../../services/auth.service';
     IonButton,
     IonInput,
     IonSpinner,
+    IonIcon // 3. Add to imports array
   ],
   templateUrl: './login.page.html',
   styleUrls:   ['./login.page.scss'],
@@ -31,10 +37,13 @@ export class LoginPage {
   constructor(
     private auth:  AuthService,
     private toast: ToastController,
-  ) {}
+  ) {
+    // 4. Register the icon for use
+    addIcons({ restaurantOutline });
+  }
 
   async onLogin() {
-    // Basic validation
+    // ... your existing login logic remains the same
     if (!this.email || !this.password) {
       await this.showToast('Please fill in all fields', 'warning');
       return;
@@ -52,17 +61,11 @@ export class LoginPage {
       password: this.password,
     }).subscribe({
       next: () => {
-        // auth.service.ts handles the redirect automatically:
-        // is_admin = true  → /admin/dashboard
-        // is_admin = false → /tabs/home
         this.loading = false;
       },
       error: async (err) => {
         this.loading = false;
-
-        // Extract the best error message available
         let msg = 'Login failed. Please try again.';
-
         if (err?.error) {
           if (typeof err.error === 'string') {
             msg = err.error;
@@ -84,7 +87,6 @@ export class LoginPage {
         } else if (err?.status === 500) {
           msg = 'Server error. Please try again later.';
         }
-
         await this.showToast(msg, 'danger');
       },
     });

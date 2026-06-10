@@ -1,13 +1,14 @@
 <ion-content [fullscreen]="true" class="landing-content">
   <div class="landing-wrap">
 
-    <!-- HERO -->
     <div class="hero-section">
       <div class="hero-inner">
 
         <div class="logo-block">
           <div class="logo-mark">
-            <span class="logo-icon">🍽️</span>
+            <span class="logo-icon">
+              <ion-icon name="restaurant-outline"></ion-icon>
+            </span>
             <div class="ring r1"></div>
             <div class="ring r2"></div>
           </div>
@@ -18,7 +19,9 @@
         <div class="slides-wrap">
           <div *ngFor="let s of slides; let i = index"
             class="slide" [class.active]="currentSlide === i">
-            <div class="slide-emoji">{{ s.emoji }}</div>
+            <div class="slide-emoji">
+              <ion-icon [name]="s.icon"></ion-icon>
+            </div>
             <h2 class="slide-title">{{ s.title }}</h2>
             <p class="slide-desc">{{ s.desc }}</p>
           </div>
@@ -34,15 +37,15 @@
       </div>
     </div>
 
-    <!-- FEATURES -->
     <div class="features-row">
       <div *ngFor="let f of features" class="feat">
-        <span class="feat-icon">{{ f.icon }}</span>
+        <span class="feat-icon">
+          <ion-icon [name]="f.icon"></ion-icon>
+        </span>
         <span class="feat-label">{{ f.label }}</span>
       </div>
     </div>
 
-    <!-- ACTIONS — simple, no "admin" button exposed -->
     <div class="actions-section">
       <div class="actions-card">
         <p class="actions-heading">Welcome to EATSY</p>

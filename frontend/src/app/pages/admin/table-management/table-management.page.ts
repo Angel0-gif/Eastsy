@@ -3,7 +3,23 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { IonContent, ToastController, AlertController } from '@ionic/angular/standalone';
+import { 
+  IonContent, 
+  ToastController, 
+  AlertController,
+  IonIcon // 1. Imported IonIcon component
+} from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+// 2. Imported asset definitions cleanly for administrative layouts
+import { 
+  easelOutline, 
+  barChartOutline, 
+  bookOutline, 
+  cartOutline, 
+  trendingUpOutline, 
+  createOutline, 
+  trashOutline 
+} from 'ionicons/icons';
 import { environment } from '../../../../environments/environment';
 
 interface TableItem {
@@ -17,7 +33,7 @@ interface TableItem {
 @Component({
   selector:    'app-admin-tables',
   standalone:  true,
-  imports:     [CommonModule, FormsModule, IonContent],
+  imports:     [CommonModule, FormsModule, IonContent, IonIcon], // 3. Added IonIcon to definitions array
   templateUrl: './table-management.page.html',
   styleUrls:   ['./table-management.page.scss'],
 })
@@ -38,11 +54,21 @@ export class AdminTablesPage implements OnInit {
     private toast:  ToastController,
     private alert:  AlertController,
     private http:   HttpClient,
-  ) {}
+  ) {
+    // 4. Registered operational layouts inside standalone builder pipeline
+    addIcons({
+      easelOutline,
+      barChartOutline,
+      bookOutline,
+      cartOutline,
+      trendingUpOutline,
+      createOutline,
+      trashOutline
+    });
+  }
 
   ngOnInit() { this.loadTables(); }
 
-  // ── Load real tables from backend (same data clients see) ───
   loadTables() {
     this.loading = true;
     this.http.get<any>(`${environment.apiUrl}/tables/`).subscribe({
@@ -97,7 +123,6 @@ export class AdminTablesPage implements OnInit {
     };
 
     if (this.editingId !== null) {
-      // UPDATE existing table in backend
       this.http.patch<any>(`${environment.apiUrl}/tables/${this.editingId}/`, payload).subscribe({
         next: async (res) => {
           const idx = this.tables.findIndex(t => t.id === this.editingId);
@@ -108,7 +133,6 @@ export class AdminTablesPage implements OnInit {
         error: async (err) => await this.showToast('Update failed: ' + this.getError(err), 'danger'),
       });
     } else {
-      // CREATE new table in backend — client reservation page will see it immediately
       this.http.post<any>(`${environment.apiUrl}/tables/`, payload).subscribe({
         next: async (res) => {
           this.tables.push({ ...res, location: res.location || this.form.location });
@@ -120,7 +144,6 @@ export class AdminTablesPage implements OnInit {
     }
   }
 
-  // ── Cycle status and immediately save to backend ─────────
   cycleStatus(table: TableItem) {
     const order: TableItem['status'][] = ['available', 'occupied', 'reserved'];
     const next = order[(order.indexOf(table.status) + 1) % order.length];

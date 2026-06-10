@@ -3,19 +3,21 @@
     <ion-title class="eatsy-logo">Profile</ion-title>
   </ion-toolbar>
 </ion-header>
+
 <ion-content>
-  <!-- AVATAR -->
   <div class="prof-head">
     <div class="av-circle" (click)="avatarInput.click()">
       <img *ngIf="user?.avatar"
-     [src]="getAvatarUrl(user?.avatar)"
-     alt="Avatar"
-     class="avatar-img">
-        <span *ngIf="!user?.avatar">{{ user?.full_name?.slice(0,2)?.toUpperCase() }}</span>
-          <div class="avatar-edit-badge">📷</div>
+        [src]="getAvatarUrl(user?.avatar)"
+        alt="Avatar"
+        class="avatar-img">
+      <span *ngIf="!user?.avatar">{{ user?.full_name?.slice(0,2)?.toUpperCase() }}</span>
+      <div class="avatar-edit-badge">
+        <ion-icon name="camera-outline"></ion-icon>
+      </div>
     </div>
     <input #avatarInput type="file" accept="image/*" style="display:none"
-    (change)="onAvatarChange($event)">
+      (change)="onAvatarChange($event)">
     <h2 class="prof-name">{{ user?.full_name }}</h2>
     <p class="prof-email">{{ user?.email }}</p>
     <p class="prof-phone">{{ user?.phone }}</p>
@@ -25,52 +27,60 @@
     </div>
   </div>
 
-  <!-- ACCOUNT MENU -->
   <p class="sec-title">My Account</p>
   <div class="menu-group">
     <div *ngFor="let item of menuItems" class="menu-item" (click)="navigate(item.route)">
-      <span class="mi-icon">{{ item.icon }}</span>
+      <span class="mi-icon">
+        <ion-icon [name]="item.icon"></ion-icon>
+      </span>
       <span class="mi-label">{{ item.label }}</span>
       <span class="mi-val">{{ item.value }}</span>
-      <span class="mi-chev">›</span>
+      <span class="mi-chev">
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </span>
     </div>
   </div>
 
-  <!-- MAP -->
   <p class="sec-title">Find Us</p>
-  <!-- REAL MAP using Google Maps embed -->
-<div class="map-card">
-  <div class="map-vis">
-    <iframe
-      class="real-map"
-      loading="lazy"
-      allowfullscreen
-      referrerpolicy="no-referrer-when-downgrade"
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3980.7964!2d11.5021!3d3.8667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM8KwNTInMDAuMSJOIDExwrAzMCcwNy42IkU!5e0!3m2!1sen!2scm!4v1234567890">
-    </iframe>
+  <div class="map-card">
+    <div class="map-vis">
+      <iframe
+        class="real-map"
+        loading="lazy"
+        allowfullscreen
+        referrerpolicy="no-referrer-when-downgrade"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3980.7964!2d11.5021!3d3.8667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM8KwNTInMDAuMSJOIDExwrAzMCcwNy42IkU!5e0!3m2!1sen!2scm!4v1234567890">
+      </iframe> </div>
+    <div class="map-info">
+      <div class="map-name">EATSY Restaurant</div>
+      <div class="map-addr">Rue de la Paix, Yaoundé Centre, Cameroun</div>
+    </div>
   </div>
-  <div class="map-info">
-    <div class="map-name">EATSY Restaurant</div>
-    <div class="map-addr">Rue de la Paix, Yaoundé Centre, Cameroun</div>
+  <div class="dir-btn" (click)="openDirections()">
+    <ion-icon name="map-outline" style="margin-right: 6px; vertical-align: middle;"></ion-icon>
+    Get Directions
   </div>
-</div>
-<div class="dir-btn" (click)="openDirections()">
-  🗺️ Get Directions
-</div>
 
-  <!-- SETTINGS -->
   <p class="sec-title">Settings</p>
   <div class="menu-group">
     <div *ngFor="let s of settings" class="menu-item">
-      <span class="mi-icon">{{ s.icon }}</span>
+      <span class="mi-icon">
+        <ion-icon [name]="s.icon"></ion-icon>
+      </span>
       <span class="mi-label">{{ s.label }}</span>
       <span class="mi-val">{{ s.value }}</span>
-      <span class="mi-chev">›</span>
+      <span class="mi-chev">
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </span>
     </div>
     <div class="menu-item danger" (click)="confirmLogout()">
-      <span class="mi-icon">🚪</span>
+      <span class="mi-icon">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </span>
       <span class="mi-label">Log Out</span>
-      <span class="mi-chev">›</span>
+      <span class="mi-chev">
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </span>
     </div>
   </div>
 

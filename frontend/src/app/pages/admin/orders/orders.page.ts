@@ -2,12 +2,33 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { IonContent, ToastController } from '@ionic/angular/standalone';
+import { 
+  IonContent, 
+  ToastController,
+  IonIcon // 1. Imported IonIcon component
+} from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+// 2. Imported system layout definitions from ionicons types
+import { 
+  cartOutline, 
+  barChartOutline, 
+  bookOutline, 
+  easelOutline, 
+  trendingUpOutline,
+  chevronUpOutline,
+  chevronDownOutline,
+  callOutline
+} from 'ionicons/icons';
 
 @Component({
   selector: 'app-admin-orders',
   standalone: true,
-  imports: [CommonModule, FormsModule, IonContent],
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    IonContent,
+    IonIcon // 3. Added to standalone template configurations
+  ],
   templateUrl: './orders.page.html',
   styleUrls: ['./orders.page.scss'],
 })
@@ -25,10 +46,21 @@ export class AdminOrdersPage {
   ];
 
   expandedId: string | null = null;
-
   statusFlow = ['received','confirmed','preparing','on_the_way','delivered'];
 
-  constructor(public router: Router, private toast: ToastController) {}
+  constructor(public router: Router, private toast: ToastController) {
+    // 4. Bound operational vector iconography markers inside standalone lifecycle registry
+    addIcons({
+      cartOutline,
+      barChartOutline,
+      bookOutline,
+      easelOutline,
+      trendingUpOutline,
+      chevronUpOutline,
+      chevronDownOutline,
+      callOutline
+    });
+  }
 
   get filtered() {
     return this.filterStatus === 'all'

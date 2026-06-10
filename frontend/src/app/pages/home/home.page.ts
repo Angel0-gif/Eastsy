@@ -6,7 +6,16 @@ import {
   IonButtons, IonButton, IonIcon, IonRefresher, IonRefresherContent
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { cartOutline, notificationsOutline } from 'ionicons/icons';
+// Added new icon assets here
+import { 
+  cartOutline, 
+  notificationsOutline, 
+  bookOutline, 
+  calendarOutline, 
+  locateOutline, 
+  starOutline, 
+  restaurantOutline 
+} from 'ionicons/icons';
 import { AuthService } from '../../services/auth.service';
 import { OrderService } from '../../services/order.service';
 import { CartService } from '../../services/cart.service';
@@ -16,10 +25,10 @@ import { Order, User } from '../../models';
   selector: 'app-home',
   standalone: true,
   imports: [
-  CommonModule,    // ← make sure this is here
-  IonContent, IonHeader, IonToolbar, IonTitle,
-  IonButtons, IonButton, IonIcon, IonRefresher, IonRefresherContent,
-],
+    CommonModule,
+    IonContent, IonHeader, IonToolbar, IonTitle,
+    IonButtons, IonButton, IonIcon, IonRefresher, IonRefresherContent,
+  ],
   templateUrl: './home.page.html',
   styleUrls:   ['./home.page.scss'],
 })
@@ -35,11 +44,19 @@ export class HomePage implements OnInit {
     public  cart:   CartService,
     private router: Router,
   ) {
-    addIcons({ cartOutline, notificationsOutline });
+    // Registered all the new page icons inside the registry
+    addIcons({ 
+      cartOutline, 
+      notificationsOutline, 
+      bookOutline, 
+      calendarOutline, 
+      locateOutline, 
+      starOutline, 
+      restaurantOutline 
+    });
   }
 
   ngOnInit() {
-    // Cast to local User type to resolve minor type differences (e.g. tier string union mismatch)
     this.user = this.auth.currentUser() as unknown as User;
     this.loadRecentOrders();
   }

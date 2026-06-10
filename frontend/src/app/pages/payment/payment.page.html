@@ -5,7 +5,6 @@
 </ion-header>
 
 <ion-content>
-  <!-- ORDER SUMMARY -->
   <p class="sec-title">Order Summary</p>
   <div class="summary-card">
     <div *ngIf="cart.items().length === 0" class="empty-note">No items in cart</div>
@@ -25,13 +24,14 @@
     </div>
   </div>
 
-  <!-- PAYMENT METHODS -->
   <p class="sec-title">Payment Method</p>
   <div class="methods-list">
     <div *ngFor="let m of methods"
       class="method-card" [class.selected]="selectedMethod === m.id"
       (click)="selectMethod(m.id)">
-      <div class="method-icon">{{ m.icon }}</div>
+      <div class="method-icon">
+        <ion-icon [name]="m.icon"></ion-icon>
+      </div>
       <div class="method-info">
         <p class="method-name">{{ m.name }}</p>
         <p class="method-sub">{{ m.sub }}</p>
@@ -40,53 +40,53 @@
     </div>
   </div>
 
-  <!-- MOMO FORM -->
-<div class="momo-form" *ngIf="selectedMethod === 'momo'">
-  <label class="field-label">Mobile Number</label>
-  <div class="phone-input-wrap">
-    <select [(ngModel)]="momoOperator" class="operator-select">
-      <option value="mtn">📱 MTN MoMo</option>
-      <option value="orange">🟠 Orange Money</option>
-    </select>
-    <input class="eatsy-input phone-input" type="tel"
-      [(ngModel)]="momoPhone"
-      placeholder="6XX XXX XXX"
-      maxlength="9">
-  </div>
-  <p class="momo-hint">
-    A payment prompt will be sent to
-    <strong>+237 {{ momoPhone }}</strong>
-  </p>
-</div>
-
-<!-- CARD FORM -->
-<div class="card-form" *ngIf="selectedMethod === 'card'">
-  <label class="field-label">Card Number</label>
-  <input class="eatsy-input" type="text" placeholder="1234 5678 9012 3456"
-    [(ngModel)]="cardNumber" maxlength="19">
-  <div class="card-row">
-    <div class="card-field">
-      <label class="field-label">Expiry</label>
-      <input class="eatsy-input" type="text" placeholder="MM/YY"
-        [(ngModel)]="cardExpiry" maxlength="5">
+  <div class="momo-form" *ngIf="selectedMethod === 'momo'">
+    <label class="field-label">Mobile Number</label>
+    <div class="phone-input-wrap">
+      <select [(ngModel)]="momoOperator" class="operator-select">
+        <option value="mtn">MTN MoMo</option>
+        <option value="orange">Orange Money</option>
+      </select>
+      <input class="eatsy-input phone-input" type="tel"
+        [(ngModel)]="momoPhone"
+        placeholder="6XX XXX XXX"
+        maxlength="9">
     </div>
-    <div class="card-field">
-      <label class="field-label">CVV</label>
-      <input class="eatsy-input" type="password" placeholder="•••"
-        [(ngModel)]="cardCvv" maxlength="3">
-    </div>
+    <p class="momo-hint">
+      A payment prompt will be sent to
+      <strong>+237 {{ momoPhone }}</strong>
+    </p>
   </div>
-  <label class="field-label" style="margin-top:10px;">Cardholder Name</label>
-  <input class="eatsy-input" type="text" placeholder="Full name on card"
-    [(ngModel)]="cardName">
-</div>
 
-  <!-- PAY BUTTON -->
+  <div class="card-form" *ngIf="selectedMethod === 'card'">
+    <label class="field-label">Card Number</label>
+    <input class="eatsy-input" type="text" placeholder="1234 5678 9012 3456"
+      [(ngModel)]="cardNumber" maxlength="19">
+    <div class="card-row">
+      <div class="card-field">
+        <label class="field-label">Expiry</label>
+        <input class="eatsy-input" type="text" placeholder="MM/YY"
+          [(ngModel)]="cardExpiry" maxlength="5">
+      </div>
+      <div class="card-field">
+        <label class="field-label">CVV</label>
+        <input class="eatsy-input" type="password" placeholder="•••"
+          [(ngModel)]="cardCvv" maxlength="3">
+      </div>
+    </div>
+    <label class="field-label" style="margin-top:10px;">Cardholder Name</label>
+    <input class="eatsy-input" type="text" placeholder="Full name on card"
+      [(ngModel)]="cardName">
+  </div>
+
   <div class="page-footer">
     <ion-button expand="block" class="btn-gold" (click)="pay()" [disabled]="loading || cart.itemCount() === 0">
       <ion-spinner *ngIf="loading" name="crescent" slot="start"></ion-spinner>
       {{ loading ? 'Processing…' : 'Pay ' + (cart.total() | number) + ' XAF →' }}
     </ion-button>
-    <p class="secure-note">🔒 Secured with HTTPS · PCI DSS compliant</p>
+    <p class="secure-note">
+      <ion-icon name="lock-closed-outline" style="vertical-align: middle; margin-right: 4px;"></ion-icon> 
+      Secured with HTTPS · PCI DSS compliant
+    </p>
   </div>
 </ion-content>

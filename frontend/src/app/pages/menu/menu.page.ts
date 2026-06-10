@@ -7,7 +7,8 @@ import {
   IonModal, IonList, IonItem, IonThumbnail, ToastController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { cartOutline, addOutline, removeOutline } from 'ionicons/icons';
+// Added restaurantOutline to the import list
+import { cartOutline, addOutline, removeOutline, restaurantOutline } from 'ionicons/icons';
 import { MenuService } from '../../services/menu.service';
 import { CartService } from '../../services/cart.service';
 import { MenuItem, MenuCategory } from '../../models';
@@ -46,7 +47,8 @@ export class MenuPage implements OnInit {
     public  cart:    CartService,
     private toast:   ToastController,
   ) {
-    addIcons({ cartOutline, addOutline, removeOutline });
+    // Registered restaurantOutline here to handle the empty state icon
+    addIcons({ cartOutline, addOutline, removeOutline, restaurantOutline });
   }
 
   ngOnInit() { this.loadMenu(); }
@@ -97,8 +99,8 @@ export class MenuPage implements OnInit {
   }
 
   getImageUrl(image: string | null | undefined): string {
-  if (!image) return '';
-  if (image.startsWith('http')) return image;
-  return `http://127.0.0.1:8000${image}`;
-}
+    if (!image) return '';
+    if (image.startsWith('http')) return image;
+    return `http://127.0.0.1:8000${image}`;
+  }
 }

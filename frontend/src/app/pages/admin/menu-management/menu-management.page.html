@@ -1,22 +1,32 @@
 <ion-content class="admin-content">
   <div class="admin-wrap">
 
-    <!-- TOP BAR -->
     <div class="admin-topbar">
-      <div class="admin-brand">📖 Menu Management</div>
+      <div class="admin-brand">
+        <ion-icon name="book-outline" style="vertical-align: middle; margin-right: 4px;"></ion-icon> 
+        Menu Management
+      </div>
       <button class="add-btn" (click)="openAdd()">+ Add Item</button>
     </div>
 
-    <!-- NAV -->
     <div class="admin-nav">
-      <div class="nav-item" (click)="go('dashboard')"><span>📊</span> Dashboard</div>
-      <div class="nav-item active" (click)="go('menu')"><span>📖</span> Menu</div>
-      <div class="nav-item" (click)="go('tables')"><span>🪑</span> Tables</div>
-      <div class="nav-item" (click)="go('orders')"><span>🛒</span> Orders</div>
-      <div class="nav-item" (click)="go('reports')"><span>📈</span> Reports</div>
+      <div class="nav-item" (click)="go('dashboard')">
+        <ion-icon name="bar-chart-outline"></ion-icon> Dashboard
+      </div>
+      <div class="nav-item active" (click)="go('menu')">
+        <ion-icon name="book-outline"></ion-icon> Menu
+      </div>
+      <div class="nav-item" (click)="go('tables')">
+        <ion-icon name="easel-outline"></ion-icon> Tables
+      </div>
+      <div class="nav-item" (click)="go('orders')">
+        <ion-icon name="cart-outline"></ion-icon> Orders
+      </div>
+      <div class="nav-item" (click)="go('reports')">
+        <ion-icon name="trending-up-outline"></ion-icon> Reports
+      </div>
     </div>
 
-    <!-- CATEGORY FILTER -->
     <div class="cat-row">
       <div *ngFor="let c of categories"
         class="cat-pill" [class.active]="filterCat === c"
@@ -25,10 +35,14 @@
       </div>
     </div>
 
-    <!-- MENU ITEMS -->
     <div class="items-list">
       <div *ngFor="let item of filtered" class="item-card">
-        <div class="item-emoji">{{ item.emoji }}</div>
+        
+        <div class="item-image-wrapper">
+          <img *ngIf="item.image" [src]="getImageUrl(item.image)" class="menu-item-thumb" alt="{{ item.name }}">
+          <div *ngIf="!item.image" class="item-emoji-fallback">{{ item.emoji }}</div>
+        </div>
+
         <div class="item-info">
           <div class="item-name">{{ item.name }}</div>
           <div class="item-desc">{{ item.description }}</div>
@@ -37,19 +51,24 @@
             <span class="item-price">{{ item.price | number }} XAF</span>
           </div>
         </div>
+        
         <div class="item-actions">
           <div class="avail-toggle" [class.on]="item.available" (click)="toggleAvail(item)">
-            {{ item.available ? '✅' : '🔴' }}
+            <ion-icon [name]="item.available ? 'checkmark-circle' : 'close-circle'" 
+                      [color]="item.available ? 'success' : 'danger'"></ion-icon>
           </div>
-          <button class="action-btn edit" (click)="openEdit(item)">✏️</button>
-          <button class="action-btn del" (click)="deleteItem(item)">🗑️</button>
+          <button class="action-btn edit" (click)="openEdit(item)">
+            <ion-icon name="create-outline"></ion-icon>
+          </button>
+          <button class="action-btn del" (click)="deleteItem(item)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </button>
         </div>
       </div>
     </div>
 
   </div>
 
-  <!-- ADD / EDIT FORM PANEL -->
   <div class="form-overlay" *ngIf="showForm" (click)="cancel()"></div>
   <div class="form-panel" *ngIf="showForm">
     <div class="form-header">
@@ -57,29 +76,34 @@
       <button class="form-close" (click)="cancel()">✕</button>
     </div>
     <div class="form-body">
+      
       <div class="fgroup">
-        <label>Emoji</label>
-        <div class="fgroup">
         <label>Item Photo (optional)</label>
-        <input type="file" accept="image/*" class="ainput file-input"
-        (change)="onImageSelected($event)">
+        <input type="file" accept="image/*" class="ainput file-input" (change)="onImageSelected($event)">
         <img *ngIf="imagePreview" [src]="imagePreview"
-        style="width:100%;height:120px;object-fit:cover;border-radius:8px;margin-top:8px;">
-        </div>
+          style="width:100%;height:120px;object-fit:cover;border-radius:8px;margin-top:8px;">
+      </div>
+
+      <div class="fgroup">
+        <label>Emoji Fallback</label>
         <input [(ngModel)]="form.emoji" class="ainput" placeholder="🍽️" maxlength="4">
       </div>
+
       <div class="fgroup">
         <label>Name *</label>
         <input [(ngModel)]="form.name" class="ainput" placeholder="e.g. Poulet DG">
       </div>
+      
       <div class="fgroup">
         <label>Description</label>
         <textarea [(ngModel)]="form.description" class="ainput" rows="2" placeholder="Short description"></textarea>
       </div>
+      
       <div class="fgroup">
         <label>Price (XAF) *</label>
         <input [(ngModel)]="form.price" class="ainput" type="number" placeholder="0">
       </div>
+      
       <div class="fgroup">
         <label>Category</label>
         <select [(ngModel)]="form.category" class="ainput aselect">
@@ -90,6 +114,7 @@
           <option value="special">Chef's Special</option>
         </select>
       </div>
+      
       <div class="fgroup toggle-group">
         <label>Available</label>
         <div class="toggle-switch" [class.on]="form.available" (click)="form.available = !form.available">
@@ -97,6 +122,7 @@
         </div>
       </div>
     </div>
+    
     <div class="form-footer">
       <button class="fbtn cancel" (click)="cancel()">Cancel</button>
       <button class="fbtn save" (click)="save()">{{ editingId ? 'Update' : 'Add Item' }}</button>

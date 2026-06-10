@@ -5,15 +5,15 @@
 </ion-header>
 
 <ion-content>
-  <!-- NO ACTIVE ORDER -->
   <div *ngIf="!order" class="empty-state">
-    <p class="empty-icon">🍽️</p>
+    <p class="empty-icon-wrap">
+      <ion-icon name="restaurant-outline" class="empty-icon"></ion-icon>
+    </p>
     <p>No active order found.</p>
     <p class="empty-sub">Place an order from the menu to track it here.</p>
   </div>
 
   <ng-container *ngIf="order">
-    <!-- ORDER HEADER -->
     <p class="sec-title">Active Order</p>
     <div class="order-header-card">
       <div>
@@ -23,11 +23,12 @@
       <span class="badge badge-green">{{ order.status | titlecase }}</span>
     </div>
 
-    <!-- TRACKING STEPS -->
     <div class="track-card">
       <ng-container *ngFor="let step of steps; let i = index">
         <div class="tstep">
-          <div class="step-icon" [ngClass]="stepState(step)">{{ step.icon }}</div>
+          <div class="step-icon" [ngClass]="stepState(step)">
+            <ion-icon [name]="step.icon"></ion-icon>
+          </div>
           <div class="step-info">
             <p class="step-name">{{ step.label }}</p>
             <p class="step-time">{{ stepState(step) === 'done' ? 'Completed' : stepState(step) === 'active' ? 'In progress…' : '—' }}</p>
@@ -37,7 +38,6 @@
       </ng-container>
     </div>
 
-    <!-- ORDER ITEMS -->
     <p class="sec-title">Items</p>
     <div class="items-card">
       <div *ngFor="let item of order.items" class="item-row">

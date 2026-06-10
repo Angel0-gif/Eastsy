@@ -1,67 +1,67 @@
 <ion-content class="admin-content">
   <div class="admin-wrap">
 
-    <!-- TOP BAR -->
     <div class="admin-topbar">
       <div>
-        <div class="admin-brand">⚙️ EATSY Admin</div>
+        <div class="admin-brand">
+          <ion-icon name="settings-outline" style="vertical-align: middle; margin-right: 4px;"></ion-icon> 
+          EATSY Admin
+        </div>
         <div class="admin-date">{{ today | date:'EEEE, d MMMM y' }}</div>
       </div>
       <button class="logout-btn" (click)="logout()">Sign Out</button>
     </div>
 
-    <!-- NAV -->
     <div class="admin-nav">
       <div class="nav-item active" (click)="go('dashboard')">
-        <span>📊</span> Dashboard
+        <ion-icon name="bar-chart-outline"></ion-icon> Dashboard
       </div>
       <div class="nav-item" (click)="go('menu')">
-        <span>📖</span> Menu
+        <ion-icon name="book-outline"></ion-icon> Menu
       </div>
       <div class="nav-item" (click)="go('tables')">
-        <span>🪑</span> Tables
+        <ion-icon name="easel-outline"></ion-icon> Tables
       </div>
       <div class="nav-item" (click)="go('orders')">
-        <span>🛒</span> Orders
+        <ion-icon name="cart-outline"></ion-icon> Orders
       </div>
       <div class="nav-item" (click)="go('reports')">
-        <span>📈</span> Reports
+        <ion-icon name="trending-up-outline"></ion-icon> Reports
       </div>
     </div>
 
-    <!-- STATS -->
     <div class="sec-title">Today's Overview</div>
     <div class="stats-grid">
       <div *ngFor="let s of stats" class="stat-card">
-        <div class="stat-icon">{{ s.icon }}</div>
+        <div class="stat-icon">
+          <ion-icon [name]="s.icon"></ion-icon>
+        </div>
         <div class="stat-val">{{ s.value }}</div>
         <div class="stat-label">{{ s.label }}</div>
         <div class="stat-trend" [class.up]="s.up" *ngIf="s.trend">{{ s.trend }}</div>
       </div>
     </div>
 
-    <!-- QUICK ACTIONS -->
     <div class="sec-title">Quick Actions</div>
     <div class="qa-grid">
       <div class="qa-card" (click)="go('menu')">
-        <span class="qa-ico">➕</span>
+        <span class="qa-ico"><ion-icon name="add-outline"></ion-icon></span>
         <span class="qa-lbl">Add Menu Item</span>
       </div>
       <div class="qa-card" (click)="go('tables')">
-        <span class="qa-ico">🪑</span>
+        <span class="qa-ico"><ion-icon name="easel-outline"></ion-icon></span>
         <span class="qa-lbl">Manage Tables</span>
       </div>
       <div class="qa-card" (click)="go('orders')">
-        <span class="qa-ico">🛒</span>
+        <span class="qa-ico"><ion-icon name="cart-outline"></ion-icon></span>
         <span class="qa-lbl">View Orders</span>
       </div>
       <div class="qa-card" (click)="go('reports')">
-        <span class="qa-ico">📄</span>
+        <span class="qa-ico"><ion-icon name="document-text-outline"></ion-icon></span>
         <span class="qa-lbl">Daily Report</span>
       </div>
     </div>
 
-    <!-- RECENT ORDERS -->
     <div class="sec-title">Recent Orders</div>
     <div class="table-card">
       <table class="data-table">
@@ -94,7 +94,6 @@
       </table>
     </div>
 
-    <!-- MENU SNAPSHOT -->
     <div class="sec-title">Menu Snapshot</div>
     <div class="menu-list">
       <div *ngFor="let m of menuItems" class="menu-row">

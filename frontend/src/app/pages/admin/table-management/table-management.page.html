@@ -1,25 +1,38 @@
 <ion-content class="admin-content">
   <div class="admin-wrap">
+    
     <div class="admin-topbar">
-      <div class="admin-brand">🪑 Table Management</div>
+      <div class="admin-brand">
+        <ion-icon name="easel-outline" style="vertical-align: middle; margin-right: 4px;"></ion-icon> 
+        Table Management
+      </div>
       <button class="add-btn" (click)="openAdd()">+ Add Table</button>
     </div>
+
     <div class="admin-nav">
-      <div class="nav-item" (click)="go('dashboard')"><span>📊</span> Dashboard</div>
-      <div class="nav-item" (click)="go('menu')"><span>📖</span> Menu</div>
-      <div class="nav-item active" (click)="go('tables')"><span>🪑</span> Tables</div>
-      <div class="nav-item" (click)="go('orders')"><span>🛒</span> Orders</div>
-      <div class="nav-item" (click)="go('reports')"><span>📈</span> Reports</div>
+      <div class="nav-item" (click)="go('dashboard')">
+        <ion-icon name="bar-chart-outline"></ion-icon> Dashboard
+      </div>
+      <div class="nav-item" (click)="go('menu')">
+        <ion-icon name="book-outline"></ion-icon> Menu
+      </div>
+      <div class="nav-item active" (click)="go('tables')">
+        <ion-icon name="easel-outline"></ion-icon> Tables
+      </div>
+      <div class="nav-item" (click)="go('orders')">
+        <ion-icon name="cart-outline"></ion-icon> Orders
+      </div>
+      <div class="nav-item" (click)="go('reports')">
+        <ion-icon name="trending-up-outline"></ion-icon> Reports
+      </div>
     </div>
 
-    <!-- SUMMARY -->
     <div class="summary-row">
       <div class="sum-card green"><span class="sum-val">{{ summary.available }}</span><span class="sum-lbl">Available</span></div>
       <div class="sum-card red"><span class="sum-val">{{ summary.occupied }}</span><span class="sum-lbl">Occupied</span></div>
       <div class="sum-card amber"><span class="sum-val">{{ summary.reserved }}</span><span class="sum-lbl">Reserved</span></div>
     </div>
 
-    <!-- FLOOR PLAN -->
     <div class="sec-title">Floor Plan</div>
     <div class="floor-grid">
       <div *ngFor="let t of tables" class="floor-table"
@@ -34,7 +47,6 @@
     </div>
     <p class="tap-hint">Tap a table to cycle its status</p>
 
-    <!-- TABLE LIST -->
     <div class="sec-title">All Tables</div>
     <div class="table-list">
       <div *ngFor="let t of tables" class="table-row">
@@ -50,14 +62,17 @@
           {{ t.status | titlecase }}
         </span>
         <div class="tr-actions">
-          <button class="action-btn" (click)="openEdit(t)">✏️</button>
-          <button class="action-btn" (click)="deleteTable(t)">🗑️</button>
+          <button class="action-btn" (click)="openEdit(t)">
+            <ion-icon name="create-outline"></ion-icon>
+          </button>
+          <button class="action-btn" (click)="deleteTable(t)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- FORM PANEL -->
   <div class="form-overlay" *ngIf="showForm" (click)="cancel()"></div>
   <div class="form-panel" *ngIf="showForm">
     <div class="form-header">
