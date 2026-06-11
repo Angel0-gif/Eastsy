@@ -140,10 +140,12 @@ import dj_database_url
 import os
 
 # Railway database
-if os.environ.get('DATABASE_URL'):
-    DATABASES['default'] = dj_database_url.config(
+from decouple import config as decouple_config
+_db_url = decouple_config('DATABASE_URL', default='')
+if _db_url:
+    DATABASES['default'] = dj_database_url.parse(
+        _db_url,
         conn_max_age=600,
-        ssl_require=True,
     )
 
 # Static files
