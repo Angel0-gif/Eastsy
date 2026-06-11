@@ -141,7 +141,7 @@ if _db_url:
     )
 
 # Static files
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
 MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 
 # Allow Railway domain
